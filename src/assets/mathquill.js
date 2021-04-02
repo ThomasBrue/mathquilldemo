@@ -4442,6 +4442,9 @@
     
     LatexCmds.coprod =
     LatexCmds.coproduct = bind(SummationNotation,'\\coprod ','&#8720;');
+
+//------INTEGRAL-START--------------------------------------------------------------------------------------
+
     
     LatexCmds['\u222b'] =
     LatexCmds['int'] =
@@ -4462,6 +4465,9 @@
       // FIXME: refactor rather than overriding
       _.createLeftOf = MathCommand.p.createLeftOf;
     });
+
+
+    //--------INTEGRAL-END----------------------------------------------------------------------------------------
     
     var Fraction =
     LatexCmds.frac =
