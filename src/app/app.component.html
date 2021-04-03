@@ -44,3 +44,7 @@ alt="fraction"
 <!-- <button (click)="setFocus()">set focus</button> -->
 
 <div style="border: 1px solid blue">{{ specialKey_1 }}</div>
+
+<hr />
+<input [(ngModel)]="latexToConvert" />
+<button (click)="latexToMath(latexToConvert)">Latex to Math</button>

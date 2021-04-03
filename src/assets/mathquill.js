@@ -4445,12 +4445,39 @@
 
 //------INTEGRAL-START--------------------------------------------------------------------------------------
 
-    
+
+
+LatexCmds['\u222b'] =
+LatexCmds['int'] =
+LatexCmds.integral = P(SummationNotation, function(_, super_) {
+  _.init = function() {
+    var htmlTemplate =
+    //    '<big>&int;</big>';
+
+        '<span class="mq-int mq-non-leaf">'
+        +   '<big>&int;</big>'
+        //--------------------------------------------------------
+        +   '<span class="mq-supsub mq-non-leaf">'
+       /*  +     '<span class="mq-sup" style="background-color: blue;"><span class="mq-sup-inner">&1</span></span>' */
+     //   +     '<span  style="display:inline-block;width:10px; background-color: green;" disabled>&1</span>'
+       /*  +     '<span style="display:inline-block;width:0; background-color: red;">&#8203</span>' */
+        +   '</span>'
+        //-------------------------------------------------------------
+        + '</span>'
+        + '<span  style="display:inline-block;width:10px; background-color: green; display: none;" >&0</span>'
+        ;
+
+    Symbol.prototype.init.call(this, '\\int ', htmlTemplate);
+  };
+  // FIXME: refactor rather than overriding
+//  _.createLeftOf = MathCommand.p.createLeftOf;
+});
+    //----------------------------------------------------------------------------------------------
     LatexCmds['\u222b'] =
-    LatexCmds['int'] =
+    LatexCmds['intx'] =
     LatexCmds.integral = P(SummationNotation, function(_, super_) {
       _.init = function() {
-        var htmlTemplate =
+        var htmlTemplate = 
           '<span class="mq-int mq-non-leaf">'
         +   '<big>&int;</big>'
         +   '<span class="mq-supsub mq-non-leaf">'

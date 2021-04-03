@@ -18,6 +18,8 @@ export class AppComponent implements AfterViewInit {
   specialKey_1: String;
   specialKey_2: String;
 
+  latexToConvert = '';
+
   setFocus() {}
 
   /*   $('.mathquill-editable textarea').trigger(customKeyDownEvent); */
@@ -49,11 +51,16 @@ export class AppComponent implements AfterViewInit {
           break;
 
         case 'i': // Definite integral (Calculus Toolbar)
-          this.MQ.MathField(this.mathField).write('\\int_{}^{}');
+          //   this.MQ.MathField(this.mathField).write("\\int_{}^{}");
+          this.MQ.MathField(this.mathField).write('\\int');
           break;
       }
     } else {
       switch (event.key) {
+        /* case "(":
+          this.MQ.MathField(this.mathField).write("\\left (");
+          break; */
+
         //----Keystroke Commands-----------------------------------------------------------------------------------------------------------------
 
         case '_':
@@ -95,7 +102,8 @@ export class AppComponent implements AfterViewInit {
           break;
 
         case "'": // Parentheses
-          this.MQ.MathField(this.mathField).write('( )');
+          //  this.MQ.MathField(this.mathField).write("( )");
+          this.MQ.MathField(this.mathField).write('\\left (  \\right )');
           this.MQ.MathField(this.mathField).keystroke('Left');
           break;
 
@@ -107,6 +115,10 @@ export class AppComponent implements AfterViewInit {
         //----Calculus Toolbar---------------------------------------------------------------------------------------------------------------------
         case '?': // derivative
           this.MQ.MathField(this.mathField).write('\\frac{d}{dx}');
+          break;
+
+        case '&': // indefinite integral (Calculus Toolbar)
+          this.MQ.MathField(this.mathField).write('\\intx');
           break;
 
         default:
@@ -141,9 +153,6 @@ export class AppComponent implements AfterViewInit {
     if (event.key == 'Shift' || event.key == 'Alt' || event.key == 'Control') {
       this.specialKey_1 = '';
       this.specialKey_2 = '';
-      if (event.key == 'Control') {
-        this.specialKey_1 = 'Control';
-      }
     }
   }
 
@@ -173,6 +182,7 @@ export class AppComponent implements AfterViewInit {
     this.buildWriteButton('\\sqrt[]{}', '4_sqrt_v2.png'),
 
     this.buildRegularButton('\\int', '7_int_v1.png'),
+    this.buildRegularButton('\\intx', '7_int_v2.png'),
 
     this.buildWriteButton('_{}\\textrm{}', '9_textrm_v1_down.png'),
     this.buildWriteButton('^{}\\textrm{}', '9_textrm_v2_up.png'),
@@ -190,6 +200,16 @@ export class AppComponent implements AfterViewInit {
     this.buildOperationalButton('Up', 'Up'),
     // mathField.keystroke('Shift-Left');
   ];
+
+  latexToMath(str: string) {
+    console.log('LatexToMath');
+
+    console.log('STR: ', str);
+    this.buttons.push(
+      this.buildWriteButton(str, 'AAAA')
+      //     this.buildWriteButton('\\int_{ }^{ }k=\\intx_2^4f(x)', 'AAAA')
+    );
+  }
 
   constructor() {}
   // latexSpan = document.getElementById('latex');
