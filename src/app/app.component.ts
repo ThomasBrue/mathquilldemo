@@ -183,6 +183,7 @@ export class AppComponent implements AfterViewInit {
 
     this.buildRegularButton('\\int', '7_int_v1.png'),
     this.buildRegularButton('\\intx', '7_int_v2.png'),
+    this.buildRegularButton('\\inty', '7_int_v1.png'),
 
     this.buildWriteButton('_{}\\textrm{}', '9_textrm_v1_down.png'),
     this.buildWriteButton('^{}\\textrm{}', '9_textrm_v2_up.png'),
@@ -205,6 +206,17 @@ export class AppComponent implements AfterViewInit {
     console.log('LatexToMath');
 
     console.log('STR: ', str);
+
+    //---------------KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+    //    intx   vs   int
+    //   insert x after int when integral is definite
+
+    //   \int_{ }^{ } --> int
+
+    //   \int_1^(x)  -->   \intx_1^(x)
+    //   \int_4^{3+4}  -->   \intx_4^{3+4}
+    //   \int_{4+7}^{3+4}    --> \intx_{4+7}^{3+4}
+
     this.buttons.push(
       this.buildWriteButton(str, 'AAAA')
       //     this.buildWriteButton('\\int_{ }^{ }k=\\intx_2^4f(x)', 'AAAA')
