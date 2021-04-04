@@ -3446,10 +3446,10 @@
  //   LatexCmds.inty = bind(VanillaSymbol, '\\inty', '&#8747;');
  //   LatexCmds.inty = bind(VanillaSymbol, '\\inty', '<span style="font-size: 40px;">&#8747;</span>');
 
-    LatexCmds.inty = bind(VanillaSymbol, '\\inty', '<span class="mq-int mq-non-leaf"><big>&#8747;</big></span>');
+ //   LatexCmds.inty = bind(VanillaSymbol, '\\inty', '<span class="mq-int mq-non-leaf"><big>&#8747;</big></span>');
+ LatexCmds.inty = bind(VanillaSymbol, '\\inty', '<span class="mq-int mq-non-leaf"><big>&#8747;</big></span>');
 
-
-    
+ //    \mathrm{ }
     
 
 

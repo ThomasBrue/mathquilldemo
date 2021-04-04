@@ -52,7 +52,10 @@ export class AppComponent implements AfterViewInit {
 
         case 'i': // Definite integral (Calculus Toolbar)
           //   this.MQ.MathField(this.mathField).write("\\int_{}^{}");
-          this.MQ.MathField(this.mathField).write('\\int');
+          this.MQ.MathField(this.mathField).write('\\inty');
+          this.MQ.MathField(this.mathField).write('\\mathrm{ }');
+          this.MQ.MathField(this.mathField).write('\\quad  d');
+          this.MQ.MathField(this.mathField).write('\\mathrm{ }');
           break;
       }
     } else {
@@ -170,7 +173,7 @@ export class AppComponent implements AfterViewInit {
     this.buildRegularButton('\\frac', '2_frac_v1.png'),
     this.buildWriteButton('\\frac{d}{dx}', '2_frac_v2_mathrm.png'),
 
-    /* this.buildWriteButton('\\frac{\\text{d}}{\\text{d}x}', 'idiot'), */
+    this.buildWriteButton('\\frac{\\text{d}}{\\text{d}x}', 'idiot'),
 
     this.buildWriteButton(
       '\\frac{\\partial }{\\partial x}',
