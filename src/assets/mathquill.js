@@ -4401,9 +4401,10 @@
         ;
         Symbol.prototype.init.call(this, ch, htmlTemplate);
       };
+      
       _.createLeftOf = function(cursor) {
         super_.createLeftOf.apply(this, arguments);
-        if (cursor.options.sumStartsWithNEquals) {
+        if (cursor.options.sumStartsWithNEquals) {  
           Letter('n').createLeftOf(cursor);
           Equality().createLeftOf(cursor);
         }
@@ -4509,6 +4510,89 @@ LatexCmds.integral = P(SummationNotation, function(_, super_) {
 
     //--------INTEGRAL-END----------------------------------------------------------------------------------------
     
+  //---------MathCommand   vs  SummationNotation ------------------------------------------------------------------------------------
+
+    LatexCmds['aaa'] =
+   // LatexCmds.fraction = P(MathCommand, function(_, super_) {
+      LatexCmds.fraction = P(SummationNotation, function(_, super_) {
+        _.ctrlSeq = '\\aaa';
+     
+        _.init = function() {
+          var htmlTemplate = 
+            '<span class="mq-int mq-non-leaf" style="border: 1px solid red">'
+     //     +   '<big>&int;</big>'
+       //   +   '<span class="mq-supsub mq-non-leaf">'
+          +     '<span style="display:inline-block; border: 1px solid green">&1</span>'
+          +     '<span style="display:inline-block; border: 1px solid blue">&0</span>'
+       //   +     '<span style="display:inline-block;width:0; border: 1px solid yellow">&#8203</span>'
+       //   +   '</span>'
+          + '</span>'
+          ;
+          Symbol.prototype.init.call(this, '\\int ', htmlTemplate);
+        };
+        // FIXME: refactor rather than overriding
+        _.createLeftOf = MathCommand.p.createLeftOf;
+
+
+        //-----------------------------------------------------------------------------
+
+/*         _.htmlTemplate =
+            '<span class="mq-non-leaf">'
+          +   '<span class="mq-scaled mq-sqrt-prefix">&radic;</span>'
+          +   '<span class="mq-non-leaf mq-sqrt-stem">&0</span>'
+          + '</span>'
+        ;
+        _.textTemplate = ['sqrt(', ')'];
+        _.parser = function() {
+          return latexMathParser.optBlock.then(function(optBlock) {
+            return latexMathParser.block.map(function(block) {
+              var nthroot = NthRoot();
+              nthroot.blocks = [ optBlock, block ];
+              optBlock.adopt(nthroot, 0, 0);
+              block.adopt(nthroot, optBlock, 0);
+              return nthroot;
+            });
+          }).or(super_.parser.call(this));
+        };
+        _.reflow = function() {
+          var block = this.ends[R].jQ;
+          scale(block.prev(), 1, block.innerHeight()/+block.css('fontSize').slice(0,-2) - .1);
+        }; */
+
+    });
+
+
+
+/*     LatexCmds.bbb =
+     P(MathCommand, function(_, super_) {
+      _.ctrlSeq = '\\bbb';
+      _.htmlTemplate =
+          '<span class="mq-non-leaf">'
+        +   '<span class="mq-scaled mq-sqrt-prefix">&radic;</span>'
+        +   '<span class="mq-non-leaf mq-sqrt-stem">&0</span>'
+        + '</span>'
+      ;
+      _.textTemplate = ['sqrt(', ')'];
+      _.parser = function() {
+        return latexMathParser.optBlock.then(function(optBlock) {
+          return latexMathParser.block.map(function(block) {
+            var nthroot = NthRoot();
+            nthroot.blocks = [ optBlock, block ];
+            optBlock.adopt(nthroot, 0, 0);
+            block.adopt(nthroot, optBlock, 0);
+            return nthroot;
+          });
+        }).or(super_.parser.call(this));
+      };
+      _.reflow = function() {
+        var block = this.ends[R].jQ;
+        scale(block.prev(), 1, block.innerHeight()/+block.css('fontSize').slice(0,-2) - .1);
+      };
+    }); */
+
+
+
+
     var Fraction =
     LatexCmds.frac =
     LatexCmds.dfrac =
@@ -4565,7 +4649,7 @@ LatexCmds.integral = P(SummationNotation, function(_, super_) {
     LatexCmds['\u221a'] = P(MathCommand, function(_, super_) {
       _.ctrlSeq = '\\sqrt';
       _.htmlTemplate =
-          '<span class="mq-non-leaf">'
+          '<span class="mq-non-leaf" style="border: 2px solid red">'
         +   '<span class="mq-scaled mq-sqrt-prefix">&radic;</span>'
         +   '<span class="mq-non-leaf mq-sqrt-stem">&0</span>'
         + '</span>'
@@ -4587,6 +4671,7 @@ LatexCmds.integral = P(SummationNotation, function(_, super_) {
         scale(block.prev(), 1, block.innerHeight()/+block.css('fontSize').slice(0,-2) - .1);
       };
     });
+
     
     var Vec = LatexCmds.vec = P(MathCommand, function(_, super_) {
       _.ctrlSeq = '\\vec';
@@ -4602,7 +4687,7 @@ LatexCmds.integral = P(SummationNotation, function(_, super_) {
     var NthRoot =
     LatexCmds.nthroot = P(SquareRoot, function(_, super_) {
       _.htmlTemplate =
-          '<sup class="mq-nthroot mq-non-leaf">&0</sup>'
+          '<sup class="mq-nthroot mq-non-leaf" style="border: 2px solid blue">&0</sup>'
         + '<span class="mq-scaled">'
         +   '<span class="mq-sqrt-prefix mq-scaled">&radic;</span>'
         +   '<span class="mq-sqrt-stem mq-non-leaf">&1</span>'
