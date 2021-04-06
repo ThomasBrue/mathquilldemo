@@ -53,9 +53,11 @@ export class AppComponent implements AfterViewInit {
         case 'i': // Definite integral (Calculus Toolbar)
           //   this.MQ.MathField(this.mathField).write("\\int_{}^{}");
           this.MQ.MathField(this.mathField).write('\\inty');
-          this.MQ.MathField(this.mathField).write('\\mathrm{ }');
+          this.MQ.MathField(this.mathField).write('\\aaa');
+
+          /*   this.MQ.MathField(this.mathField).write('\\mathrm{ }');
           this.MQ.MathField(this.mathField).write('\\quad  d');
-          this.MQ.MathField(this.mathField).write('\\mathrm{ }');
+          this.MQ.MathField(this.mathField).write('\\mathrm{ }'); */
           break;
       }
     } else {

@@ -4522,8 +4522,13 @@ LatexCmds.integral = P(SummationNotation, function(_, super_) {
             '<span class="mq-int mq-non-leaf" style="border: 1px solid red">'
      //     +   '<big>&int;</big>'
        //   +   '<span class="mq-supsub mq-non-leaf">'
+
+    + '<span class="mq-int mq-non-leaf"><big>&#8747;</big></span>'
+
+       +     '<span style="display:inline-block; border: 1px solid blue">&0</span>'
+       +     '<span style=" border: 1px solid green; ">&nbsp;d</span>'
           +     '<span style="display:inline-block; border: 1px solid green">&1</span>'
-          +     '<span style="display:inline-block; border: 1px solid blue">&0</span>'
+          
        //   +     '<span style="display:inline-block;width:0; border: 1px solid yellow">&#8203</span>'
        //   +   '</span>'
           + '</span>'
