@@ -4520,83 +4520,18 @@ LatexCmds.integral = P(SummationNotation, function(_, super_) {
         _.init = function() {
           var htmlTemplate = 
             '<span class="mq-int mq-non-leaf" style="border: 1px solid red">'
-     //     +   '<big>&int;</big>'
-       //   +   '<span class="mq-supsub mq-non-leaf">'
-
-    + '<span class="mq-int mq-non-leaf"><big>&#8747;</big></span>'
-
-       +     '<span style="display:inline-block; border: 1px solid blue">&0</span>'
-       +     '<span style=" border: 1px solid green; ">&nbsp;d</span>'
+          +     '<span class="mq-int mq-non-leaf"><big>&#8747;</big></span>'
+          +     '<span style="display:inline-block; border: 1px solid blue">&0</span>'
+          +     '<span style=" border: 1px solid green; ">&nbsp;d</span>'
           +     '<span style="display:inline-block; border: 1px solid green">&1</span>'
-          
-       //   +     '<span style="display:inline-block;width:0; border: 1px solid yellow">&#8203</span>'
-       //   +   '</span>'
           + '</span>'
           ;
           Symbol.prototype.init.call(this, '\\int ', htmlTemplate);
         };
-        // FIXME: refactor rather than overriding
         _.createLeftOf = MathCommand.p.createLeftOf;
 
 
-        //-----------------------------------------------------------------------------
-
-/*         _.htmlTemplate =
-            '<span class="mq-non-leaf">'
-          +   '<span class="mq-scaled mq-sqrt-prefix">&radic;</span>'
-          +   '<span class="mq-non-leaf mq-sqrt-stem">&0</span>'
-          + '</span>'
-        ;
-        _.textTemplate = ['sqrt(', ')'];
-        _.parser = function() {
-          return latexMathParser.optBlock.then(function(optBlock) {
-            return latexMathParser.block.map(function(block) {
-              var nthroot = NthRoot();
-              nthroot.blocks = [ optBlock, block ];
-              optBlock.adopt(nthroot, 0, 0);
-              block.adopt(nthroot, optBlock, 0);
-              return nthroot;
-            });
-          }).or(super_.parser.call(this));
-        };
-        _.reflow = function() {
-          var block = this.ends[R].jQ;
-          scale(block.prev(), 1, block.innerHeight()/+block.css('fontSize').slice(0,-2) - .1);
-        }; */
-
     });
-
-
-
-/*     LatexCmds.bbb =
-     P(MathCommand, function(_, super_) {
-      _.ctrlSeq = '\\bbb';
-      _.htmlTemplate =
-          '<span class="mq-non-leaf">'
-        +   '<span class="mq-scaled mq-sqrt-prefix">&radic;</span>'
-        +   '<span class="mq-non-leaf mq-sqrt-stem">&0</span>'
-        + '</span>'
-      ;
-      _.textTemplate = ['sqrt(', ')'];
-      _.parser = function() {
-        return latexMathParser.optBlock.then(function(optBlock) {
-          return latexMathParser.block.map(function(block) {
-            var nthroot = NthRoot();
-            nthroot.blocks = [ optBlock, block ];
-            optBlock.adopt(nthroot, 0, 0);
-            block.adopt(nthroot, optBlock, 0);
-            return nthroot;
-          });
-        }).or(super_.parser.call(this));
-      };
-      _.reflow = function() {
-        var block = this.ends[R].jQ;
-        scale(block.prev(), 1, block.innerHeight()/+block.css('fontSize').slice(0,-2) - .1);
-      };
-    }); */
-
-
-
 
     var Fraction =
     LatexCmds.frac =
