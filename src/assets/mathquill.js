@@ -5218,7 +5218,7 @@
     }
   ));
 
-  var intIndefinite = (LatexCmds.intIndefinite = P(MathCommand, function (_, super_) {
+  LatexCmds["intIndefinite"] = P(MathCommand, function (_, super_) {
     _.ctrlSeq = "\\intIndefinite";
     _.htmlTemplate =
     '<span class="mq-int mq-non-leaf"><big>&#8747;</big></span>' +
@@ -5233,7 +5233,7 @@
       this.upInto = this.ends[R].upOutOf = this.ends[L];
       this.downInto = this.ends[L].downOutOf = this.ends[R];
     };
-  }));
+  });
 
   var LiveFraction = (LatexCmds.over = CharCmds["/"] = P(Fraction, function (
     _,
