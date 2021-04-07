@@ -209,7 +209,7 @@ export class AppComponent implements AfterViewInit {
     this.buildOperationalButton('Up', 'Up'),
     // mathField.keystroke('Shift-Left');
 
-    this.buildWriteButton('\\kkk', 'kkk'),
+    this.buildRegularButton('\\kkk', 'kkk'),
   ];
 
   latexToMath(str: string) {

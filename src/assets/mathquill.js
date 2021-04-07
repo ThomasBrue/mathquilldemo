@@ -5218,7 +5218,7 @@
     }
   ));
 
-  var KKK = P(MathCommand, function (_, super_) {
+  var KKK = (LatexCmds.kkk = P(MathCommand, function (_, super_) {
     _.ctrlSeq = "\\kkk";
     _.htmlTemplate =
       '<span class="mq-fraction mq-non-leaf">' +
@@ -5231,7 +5231,7 @@
       this.upInto = this.ends[R].upOutOf = this.ends[L];
       this.downInto = this.ends[L].downOutOf = this.ends[R];
     };
-  });
+  }));
 
   var LiveFraction = (LatexCmds.over = CharCmds["/"] = P(Fraction, function (
     _,
