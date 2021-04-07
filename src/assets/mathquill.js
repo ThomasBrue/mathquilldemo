@@ -5218,13 +5218,15 @@
     }
   ));
 
-  var KKK = (LatexCmds.kkk = P(MathCommand, function (_, super_) {
-    _.ctrlSeq = "\\kkk";
+  var intIndefinite = (LatexCmds.intIndefinite = P(MathCommand, function (_, super_) {
+    _.ctrlSeq = "\\intIndefinite";
     _.htmlTemplate =
-      '<span class="mq-fraction mq-non-leaf">' +
-      '<span class="mq-numerator">&0</span>' +
-      '<span class="mq-denominator">&1</span>' +
-      '<span style="display:inline-block;width:0">&#8203;</span>' +
+    '<span class="mq-int mq-non-leaf"><big>&#8747;</big></span>' +
+      '<span>' +
+      '<span >&nbsp;</span>' +
+      '<span>&0</span>' +
+      '<span >&nbsp;d</span>' +
+      '<span>&1</span>' +
       "</span>";
     _.textTemplate = ["(", ")/(", ")"];
     _.finalizeTree = function () {
