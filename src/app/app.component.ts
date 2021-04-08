@@ -20,6 +20,9 @@ export class AppComponent implements AfterViewInit {
 
   latexToConvert = '';
 
+  // Link to Github Mathquill-Matrix:
+  // https://github.com/Learnosity/mathquill/blob/matrix/src/commands/math/commands.js
+
   setFocus() {}
 
   /*   $('.mathquill-editable textarea').trigger(customKeyDownEvent); */
