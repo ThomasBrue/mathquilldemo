@@ -5251,6 +5251,22 @@
     };
   });
 
+  LatexCmds["deriNth"] = P(MathCommand, function (_, super_) {
+    _.ctrlSeq = "\\deriNth";
+    _.htmlTemplate =
+      '<span class="mq-fraction mq-non-leaf">' +
+      '<span class="mq-numerator">d</span>' +
+      '<span class="mq-denominator">d<span>&0</span> <span style="border: 1px solid blue">&1</span>   </span>' +
+      '<span style="display:inline-block;width:0"></span>' +
+      "</span>" +
+      "<span >&1</span>";
+    _.textTemplate = ["(", ")/(", ")"];
+    _.finalizeTree = function () {
+      this.upInto = this.ends[R].upOutOf = this.ends[L];
+      this.downInto = this.ends[L].downOutOf = this.ends[R];
+    };
+  });
+
   var LiveFraction = (LatexCmds.over = CharCmds["/"] = P(Fraction, function (
     _,
     super_
