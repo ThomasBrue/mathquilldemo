@@ -5221,13 +5221,29 @@
   LatexCmds["intIndefinite"] = P(MathCommand, function (_, super_) {
     _.ctrlSeq = "\\intIndefinite";
     _.htmlTemplate =
-    '<span class="mq-int mq-non-leaf"><big>&#8747;</big></span>' +
-      '<span>' +
-      '<span >&nbsp;</span>' +
-      '<span>&0</span>' +
-      '<span >&nbsp;d</span>' +
-      '<span>&1</span>' +
+      '<span class="mq-int mq-non-leaf"><big>&#8747;</big></span>' +
+      "<span>" +
+      "<span >&nbsp;</span>" +
+      "<span>&0</span>" +
+      "<span >&nbsp;d</span>" +
+      "<span>&1</span>" +
       "</span>";
+    _.textTemplate = ["(", ")/(", ")"];
+    _.finalizeTree = function () {
+      this.upInto = this.ends[R].upOutOf = this.ends[L];
+      this.downInto = this.ends[L].downOutOf = this.ends[R];
+    };
+  });
+
+  LatexCmds["deri"] = P(MathCommand, function (_, super_) {
+    _.ctrlSeq = "\\deri";
+    _.htmlTemplate =
+      '<span class="mq-fraction mq-non-leaf">' +
+      '<span class="mq-numerator">d</span>' +
+      '<span class="mq-denominator">d<span>&0</span></span>' +
+      '<span style="display:inline-block;width:0"></span>' +
+      "</span>" +
+      "<span >&1</span>";
     _.textTemplate = ["(", ")/(", ")"];
     _.finalizeTree = function () {
       this.upInto = this.ends[R].upOutOf = this.ends[L];

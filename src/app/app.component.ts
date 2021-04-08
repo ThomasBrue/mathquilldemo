@@ -212,7 +212,8 @@ export class AppComponent implements AfterViewInit {
     this.buildOperationalButton('Up', 'Up'),
     // mathField.keystroke('Shift-Left');
 
-    this.buildRegularButton('\\intIndefinite', 'intIndefinite'),
+    this.buildRegularButton('\\intIndefinite', '7_int_v1.png'),
+    this.buildRegularButton('\\deri', '2_frac_v2_mathrm.png'),
   ];
 
   latexToMath(str: string) {
