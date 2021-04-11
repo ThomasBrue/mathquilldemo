@@ -4693,6 +4693,41 @@ LatexCmds["int"] = LatexCmds.integral = P(SummationNotation, function (
     };
   });
 
+  LatexCmds["intDefinite"] = P(MathCommand, function (_, super_) {
+    _.ctrlSeq = "\\intDefinite";
+    _.htmlTemplate =
+
+
+    '<span class="mq-int mq-non-leaf">' +
+    "<big>&int;</big>" +
+    '<span class="mq-supsub mq-non-leaf">' +
+    '<span class="mq-sup"><span class="mq-sup-inner">&1</span></span>' +
+    '<span class="mq-sub">&0</span>' +
+    '<span style="display:inline-block;width:0">&#8203</span>' +
+    "</span>" +
+    "</span>"+
+    "<span >&2</span> <span>&nbsp;</span>"+
+      "<span >&3</span>"
+    
+    ;
+
+/*       '<span class="mq-int mq-non-leaf"><big>&#8747;</big></span>' +
+      "<span>" +
+      "<span >&nbsp;</span>" +
+      "<span>&0</span>" +
+      "<span >&nbsp;d</span>" +
+      "<span>&1</span>" +
+      "</span>"+
+      "<span >&2</span> <span>&nbsp;</span>"+
+      "<span >&3</span>"
+      ; */
+    _.textTemplate = ["(", ")/(", ")"];
+    _.finalizeTree = function () {
+      this.upInto = this.ends[R].upOutOf = this.ends[L];
+      this.downInto = this.ends[L].downOutOf = this.ends[R];
+    };
+  });
+
   LatexCmds["deri"] = P(MathCommand, function (_, super_) {
     _.ctrlSeq = "\\deri";
     _.htmlTemplate =
@@ -4712,12 +4747,27 @@ LatexCmds["int"] = LatexCmds.integral = P(SummationNotation, function (
   LatexCmds["deriNth"] = P(MathCommand, function (_, super_) {
     _.ctrlSeq = "\\deriNth";
     _.htmlTemplate =
+      /* '<span class="mq-fraction mq-non-leaf" style="border: 1px solid green;">' +
+      '<span style="display:inline-block">&0</span><span>&nbsp;</span>'  +
+      '<span style="display:inline-block">&1</span><span>&nbsp;</span>'  +
+      '<span style="display:inline-block">&2</span><span>&nbsp;</span>'  +
+      '<span style="display:inline-block">&3</span>'  +
+      '</span>' 
+      ;  */
+
+
+      
+
       '<span class="mq-fraction mq-non-leaf">' +
       '<span class="mq-numerator">d</span>' +
-      '<span class="mq-denominator">d<span>&0</span> <span style="border: 1px solid blue">&1</span>   </span>' +
+      '<span class="mq-denominator">d<span>&0</span></span>' +
       '<span style="display:inline-block;width:0"></span>' +
       "</span>" +
-      "<span >&1</span>";
+      "<span >&1</span> <span>&nbsp;</span>"+
+      "<span >&2</span> <span>&nbsp;</span>"+
+      "<span >&3</span>"
+      ;
+
     _.textTemplate = ["(", ")/(", ")"];
     _.finalizeTree = function () {
       this.upInto = this.ends[R].upOutOf = this.ends[L];
