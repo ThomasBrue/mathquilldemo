@@ -4619,7 +4619,7 @@ LatexCmds.product = bind(SummationNotation,'\\prod ','&prod;');
 LatexCmds.coprod =
 LatexCmds.coproduct = bind(SummationNotation,'\\coprod ','&#8720;');
 
-LatexCmds['∫'] =
+/* LatexCmds['∫'] =
 LatexCmds['int'] =
 LatexCmds.integral = P(SummationNotation, function(_, super_) {
   _.init = function() {
@@ -4637,7 +4637,95 @@ LatexCmds.integral = P(SummationNotation, function(_, super_) {
   };
   // FIXME: refactor rather than overriding
   _.createLeftOf = MathCommand.p.createLeftOf;
-});
+}); */
+
+
+LatexCmds["int"] = LatexCmds.integral = P(SummationNotation, function (
+    _,
+    super_
+  ) {
+    _.init = function () {
+      var htmlTemplate =
+        '<span class="mq-int mq-non-leaf">' +
+        "<big>&int;</big>" +
+        '<span class="mq-supsub mq-non-leaf" style="display: none;" hidden>' +
+        "</span>" +
+        "</span>" +
+        '<span  style="background-color: green; display: none;" hidden>&0</span>';
+      Symbol.prototype.init.call(this, "\\int ", htmlTemplate);
+    };
+  });
+
+  LatexCmds["\u222b"] = LatexCmds["intx"] = LatexCmds.integral = P(
+    SummationNotation,
+    function (_, super_) {
+      _.init = function () {
+        var htmlTemplate =
+          '<span class="mq-int mq-non-leaf">' +
+          "<big>&int;</big>" +
+          '<span class="mq-supsub mq-non-leaf">' +
+          '<span class="mq-sup"><span class="mq-sup-inner">&1</span></span>' +
+          '<span class="mq-sub">&0</span>' +
+          '<span style="display:inline-block;width:0">&#8203</span>' +
+          "</span>" +
+          "</span>";
+        Symbol.prototype.init.call(this, "\\int ", htmlTemplate);
+      };
+      _.createLeftOf = MathCommand.p.createLeftOf;
+    }
+  );
+
+  
+  LatexCmds["intIndefinite"] = P(MathCommand, function (_, super_) {
+    _.ctrlSeq = "\\intIndefinite";
+    _.htmlTemplate =
+      '<span class="mq-int mq-non-leaf"><big>&#8747;</big></span>' +
+      "<span>" +
+      "<span >&nbsp;</span>" +
+      "<span>&0</span>" +
+      "<span >&nbsp;d</span>" +
+      "<span>&1</span>" +
+      "</span>";
+    _.textTemplate = ["(", ")/(", ")"];
+    _.finalizeTree = function () {
+      this.upInto = this.ends[R].upOutOf = this.ends[L];
+      this.downInto = this.ends[L].downOutOf = this.ends[R];
+    };
+  });
+
+  LatexCmds["deri"] = P(MathCommand, function (_, super_) {
+    _.ctrlSeq = "\\deri";
+    _.htmlTemplate =
+      '<span class="mq-fraction mq-non-leaf">' +
+      '<span class="mq-numerator">d</span>' +
+      '<span class="mq-denominator">d<span>&0</span></span>' +
+      '<span style="display:inline-block;width:0"></span>' +
+      "</span>" +
+      "<span >&1</span>";
+    _.textTemplate = ["(", ")/(", ")"];
+    _.finalizeTree = function () {
+      this.upInto = this.ends[R].upOutOf = this.ends[L];
+      this.downInto = this.ends[L].downOutOf = this.ends[R];
+    };
+  });
+
+  LatexCmds["deriNth"] = P(MathCommand, function (_, super_) {
+    _.ctrlSeq = "\\deriNth";
+    _.htmlTemplate =
+      '<span class="mq-fraction mq-non-leaf">' +
+      '<span class="mq-numerator">d</span>' +
+      '<span class="mq-denominator">d<span>&0</span> <span style="border: 1px solid blue">&1</span>   </span>' +
+      '<span style="display:inline-block;width:0"></span>' +
+      "</span>" +
+      "<span >&1</span>";
+    _.textTemplate = ["(", ")/(", ")"];
+    _.finalizeTree = function () {
+      this.upInto = this.ends[R].upOutOf = this.ends[L];
+      this.downInto = this.ends[L].downOutOf = this.ends[R];
+    };
+  });
+
+
 
 var Fraction =
 LatexCmds.frac =
