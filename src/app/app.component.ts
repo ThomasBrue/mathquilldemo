@@ -221,6 +221,19 @@ export class AppComponent implements AfterViewInit {
     this.buildRegularButton('\\deriNth', '2_frac_v2_mathrm.png'),
 
     this.buildRegularButton('\\matrix', 'matrix'),
+
+    // \begin{matrix}c&\\&\end{matrix}        --> OUTPUT--SOLL
+    // \begin{matrix}\frac{ }{ }&\&\end{matrix}     --> HABEN
+
+    //  this.buildWriteButton('\\begin{matrix}c&\\\\&\\end{matrix}', 'writeMatrix'),
+    /* this.buildWriteButton(
+      '\\begin{matrix}c&\\\\&\\\\&\\end{matrix}',
+      'writeMatrix'
+    ), */
+    this.buildWriteButton(
+      '\\begin{matrix}&&&\\\\&\\\\&\\\\&\\end{matrix}',
+      'writeMatrix'
+    ),
   ];
 
   latexToMath(str: string) {
