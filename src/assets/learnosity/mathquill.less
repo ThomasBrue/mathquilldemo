@@ -1,0 +1,734 @@
+/*------mixins-(FOLDER)----------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------*/
+
+/*---css3.less--------------------------------------------------------------------------------------------*/
+
+.transform-origin (...) {
+  -webkit-transform-origin: @arguments;
+  -moz-transform-origin: @arguments;
+  -ms-transform-origin: @arguments;
+  -o-transform-origin: @arguments;
+  transform-origin: @arguments;
+}
+.transform (...) {
+  -webkit-transform: @arguments;
+  -moz-transform: @arguments;
+  -ms-transform: @arguments;
+  -o-transform: @arguments;
+  transform: @arguments;
+}
+
+.user-select (...) {
+  -webkit-user-select: @arguments;
+  -moz-user-select: @arguments;
+  user-select: @arguments;
+}
+
+.box-shadow (...) {
+  -webkit-box-shadow: @arguments;
+  -moz-box-shadow: @arguments;
+  box-shadow: @arguments;
+}
+
+.box-sizing (...) {
+  -webkit-box-sizing: @arguments;
+  -moz-box-sizing: @arguments;
+  box-sizing: @arguments;
+}
+
+/*-----display.less-----------------------------------------------------------------------------------------------------------*/
+
+.inline-block () {
+  display: -moz-inline-box;
+  display: inline-block;
+}
+
+/*----fonts.less------------------------------------------------------------------------------------------------------------*/
+
+@symbola: Symbola, "Times New Roman", serif;
+@times: "Times New Roman", Symbola, serif;
+@mono: "Courier New", monospace;
+
+/*----editable.less------------------------------------------------------------------------------------------------------------*/
+
+.mq-editable-field {
+  .inline-block;
+  .mq-cursor {
+    border-left: 1px solid black;
+    margin-left: -1px;
+    position: relative;
+    z-index: 1;
+    padding: 0;
+    .inline-block;
+
+    &.mq-blink {
+      visibility: hidden;
+    }
+  }
+  // This is a workaround to override the
+  // styles on .mq-math-mode *.
+  // TODO: figure out a better way.
+  &,
+  .mq-math-mode & {
+    border: 1px solid gray;
+
+    &.mq-focused {
+      .box-shadow(~"#8bd 0 0 1px 2px, inset #6ae 0 0 2px 0");
+      border-color: #709ac0;
+      border-radius: 1px;
+    }
+  }
+  // special styles for editables within static math
+  .mq-math-mode & {
+    margin: 1px;
+  }
+
+  ////
+  // command input with \
+  .mq-latex-command-input {
+    color: inherit;
+    font-family: @mono;
+    border: 1px solid gray;
+    padding-right: 1px;
+    margin-right: 1px;
+    margin-left: 2px;
+
+    &.mq-empty {
+      background: transparent;
+    }
+
+    // TODO: dasherize has-cursor
+    /*     &.mq-hasCursor {
+      border-color: ActiveBorder;
+    } */
+  }
+}
+
+// Keeps blocks from collapsing to zero width/height
+// when empty by inserting invisible text.
+// TODO: find a way to unify the three concepts below.
+.mq-editable-field.mq-empty:after,
+.mq-editable-field.mq-text-mode:after,
+.mq-math-mode .mq-empty:after {
+  visibility: hidden;
+  content: "c";
+}
+
+// separated from above because unrecognized pseudoclasses
+// invalidate the entire selector
+.mq-editable-field .mq-cursor:only-child:after,
+.mq-editable-field .mq-textarea + .mq-cursor:last-child:after {
+  visibility: hidden;
+  content: "c";
+}
+
+.mq-editable-field .mq-text-mode .mq-cursor:only-child:after {
+  content: "";
+}
+
+.mq-editable-field.mq-text-mode {
+  overflow-x: auto;
+
+  // so IE8 won't show a vertical scrollbar
+  overflow-y: hidden;
+}
+
+/*--font.less--------------------------------------------------------------------------------------------------------------*/
+/* 
+@omit-font-face: ;
+.font-face;
+.font-face() when not (@omit-font-face) {
+  @font-face {
+    font-family: Symbola;
+    .font-srcs;
+  }
+}
+
+@basic: ;
+.font-srcs() when not (@basic) {
+  src: url(fonts/Symbola.eot);
+  src: local("Symbola Regular"), local("Symbola"),
+    url(fonts/Symbola.woff2) format("woff2"),
+    url(fonts/Symbola.woff) format("woff"),
+    url(fonts/Symbola.ttf) format("truetype"),
+    url(fonts/Symbola.svg#Symbola) format("svg");
+}
+.font-srcs() when (@basic) {
+  src: url(fonts/Symbola-basic.eot);
+  src: local("Symbola Regular"), local("Symbola"),
+    url(fonts/Symbola-basic.woff2) format("woff2"),
+    url(fonts/Symbola-basic.woff) format("woff"),
+    url(fonts/Symbola-basic.ttf) format("truetype");
+}
+ */
+/*---main.less-------------------------------------------------------------------------------------------------------------*/
+
+/*
+   * MathQuill {VERSION}, by Han, Jeanine, and Mary
+   * http://mathquill.com | maintainers@mathquill.com
+   *
+   * This Source Code Form is subject to the terms of the
+   * Mozilla Public License, v. 2.0. If a copy of the MPL
+   * was not distributed with this file, You can obtain
+   * one at http://mozilla.org/MPL/2.0/.
+   */
+@import "./mixins/fonts";
+@import "./mixins/css3";
+@import "./mixins/display";
+
+@import "font.less";
+
+@import "editable.less";
+@import "math.less";
+
+@import "selections.less";
+@import "textarea.less";
+@import "matrixed.less";
+
+/*------math.less----------------------------------------------------------------------------------------------------------*/
+
+.mq-root-block,
+.mq-math-mode .mq-root-block {
+  .inline-block;
+  width: 100%;
+  padding: 2px;
+  .box-sizing(border-box); // supported by IE8+: http://caniuse.com/css3-boxsizing
+  white-space: nowrap;
+  overflow: hidden;
+  vertical-align: middle;
+}
+.mq-math-mode {
+  font-variant: normal;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 115%;
+  line-height: 1;
+
+  .inline-block;
+  .mq-non-leaf,
+  .mq-scaled {
+    .inline-block;
+  }
+
+  // TODO: dasherize non-symbola
+  var,
+  .mq-text-mode,
+  .mq-nonSymbola {
+    font-family: @times;
+    line-height: 0.9;
+  }
+
+  * {
+    font-size: inherit;
+    line-height: inherit;
+    margin: 0;
+    padding: 0;
+    border-color: black;
+    .user-select(none);
+    box-sizing: border-box;
+  }
+
+  // TODO: what's the difference between these?
+  .mq-empty {
+    background: #ccc;
+    &.mq-root-block {
+      background: transparent;
+    }
+  }
+
+  &.mq-empty {
+    background: transparent;
+  }
+
+  .mq-text-mode {
+    display: inline-block;
+    white-space: pre;
+  }
+
+  .mq-text-mode.mq-hasCursor {
+    box-shadow: inset darkgray 0 0.1em 0.2em;
+    padding: 0 0.1em;
+    margin: 0 -0.1em;
+
+    min-width: 1ex;
+  }
+
+  .mq-font {
+    font: 1em @times;
+
+    * {
+      font-family: inherit;
+      font-style: inherit;
+    }
+  }
+
+  // TODO [Han]: Why do we have to special-case .font?
+  b,
+  b.mq-font {
+    font-weight: bolder;
+  }
+
+  var,
+  i,
+  i.mq-font {
+    font-style: italic;
+  }
+
+  var.mq-f {
+    margin-right: 0.2em;
+    margin-left: 0.1em;
+  }
+
+  .mq-roman var.mq-f {
+    margin: 0;
+  }
+
+  big {
+    font-size: 200%;
+  }
+
+  .mq-int {
+    > big {
+      display: inline-block;
+      .transform(scaleX(0.7));
+      vertical-align: -0.16em;
+    }
+
+    > .mq-supsub {
+      font-size: 80%;
+      vertical-align: -1.1em;
+      padding-right: 0.2em;
+
+      > .mq-sup > .mq-sup-inner {
+        vertical-align: 1.3em;
+      }
+
+      > .mq-sub {
+        margin-left: -0.35em;
+      }
+    }
+  }
+
+  .mq-roman {
+    font-style: normal;
+  }
+
+  .mq-sans-serif {
+    font-family: sans-serif, Symbola, serif;
+  }
+
+  .mq-monospace {
+    font-family: monospace, Symbola, serif;
+  }
+
+  .mq-overline {
+    border-top: 1px solid black;
+    margin-top: 1px;
+  }
+  .mq-underline {
+    border-bottom: 1px solid black;
+    margin-bottom: 1px;
+  }
+
+  ////
+  // operators
+  @operator-padding: 0.2em;
+
+  .mq-binary-operator {
+    padding: 0 @operator-padding;
+    .inline-block;
+  }
+
+  ////
+  // ^, _
+  // sup/sub
+  // TODO: try http://jsbin.com/gabunebe/3/edit instead
+  //   obsoletes the &nbsp; in HTML template, but needs cross-browser
+  //   testing. Should also make the superscript shrink to the size of
+  //   its contents, rather than always being as wide as the subscript.
+  //   See also .fraction
+  .mq-supsub {
+    text-align: left;
+    font-size: 90%;
+    vertical-align: -0.5em;
+
+    &.mq-sup-only {
+      vertical-align: 0.5em;
+
+      .mq-sup {
+        display: inline-block;
+        vertical-align: text-bottom;
+      }
+    }
+
+    .mq-sup {
+      display: block;
+    }
+
+    .mq-sub {
+      display: block;
+      float: left;
+    }
+
+    .mq-binary-operator {
+      padding: 0 0.1em;
+    }
+
+    // special styles for fractions
+    // within sup/sub.
+    .mq-fraction {
+      font-size: 70%;
+    }
+  }
+
+  sup.mq-nthroot {
+    font-size: 80%;
+    vertical-align: 0.8em;
+    margin-right: -0.6em;
+    margin-left: 0.2em;
+    min-width: 0.5em;
+  }
+
+  ////
+  // parentheses
+  .mq-paren {
+    padding: 0 0.1em;
+    vertical-align: top;
+    -webkit-transform-origin: center 0.06em;
+    -moz-transform-origin: center 0.06em;
+    -ms-transform-origin: center 0.06em;
+    -o-transform-origin: center 0.06em;
+    transform-origin: center 0.06em;
+
+    &.mq-ghost {
+      color: silver;
+    }
+
+    + span {
+      margin-top: 0.1em;
+      margin-bottom: 0.1em;
+    }
+  }
+
+  .mq-array {
+    vertical-align: middle;
+    text-align: center;
+  }
+
+  .mq-array > span {
+    display: block;
+  }
+
+  ////
+  // non-italicized operator names
+  // like \sin, \cos, \ln, etc.
+  .mq-operator-name {
+    font-family: Symbola, "Times New Roman", serif;
+    line-height: 0.9;
+    font-style: normal;
+  }
+  var.mq-operator-name.mq-first {
+    padding-left: 0.2em;
+  }
+  var.mq-operator-name.mq-last,
+  .mq-supsub.mq-after-operator-name {
+    padding-right: 0.2em;
+  }
+
+  ////
+  // \frac
+  // fractions
+  // TODO: try http://jsbin.com/gabunebe/4/edit instead
+  //   obsoletes the &nbsp; in HTML template, but needs cross-browser
+  //   testing. See also .supsub
+  .mq-fraction {
+    font-size: 90%;
+    text-align: center;
+    vertical-align: -0.4em;
+    padding: 0 0.2em;
+  }
+
+  // Firefox 2 (and older?) only
+  // because display:inline-block is FUBAR in Gecko < 1.9.0
+  .mq-fraction,
+  .mq-large-operator,
+  x:-moz-any-link {
+    display: -moz-groupbox;
+  }
+
+  // Firefox 3+ (Gecko 1.9.0+)
+  .mq-fraction,
+  .mq-large-operator,
+  x:-moz-any-link,
+  x:default {
+    display: inline-block;
+  }
+
+  .mq-numerator,
+  .mq-denominator,
+  .mq-dot-recurring {
+    display: block;
+  }
+
+  .mq-numerator {
+    padding: 0 0.1em;
+  }
+
+  .mq-denominator {
+    border-top: 1px solid;
+    float: right; // take out of normal flow to manipulate baseline
+    width: 100%;
+    padding: 0.1em;
+  }
+
+  .mq-dot-recurring {
+    text-align: center;
+    height: 0.3em;
+  }
+
+  ////
+  // \sqrt
+  // square roots
+  .mq-sqrt-prefix {
+    padding-top: 0;
+    position: relative;
+    top: 0.1em;
+    vertical-align: top;
+    .transform-origin(top);
+  }
+
+  .mq-sqrt-stem {
+    border-top: 1px solid;
+    margin-top: 1px;
+    padding-left: 0.15em;
+    padding-right: 0.2em;
+    margin-right: 0.1em;
+    padding-top: 1px;
+  }
+
+  .mq-diacritic-above {
+    display: block;
+    text-align: center;
+    line-height: 0.4em;
+  }
+
+  .mq-diacritic-stem {
+    display: block;
+    text-align: center;
+  }
+
+  .mq-hat-prefix {
+    display: block;
+    text-align: center;
+    line-height: 0.95em;
+    margin-bottom: -0.7em;
+    transform: scaleX(1.5);
+    -moz-transform: scaleX(1.5);
+    -o-transform: scaleX(1.5);
+    -webkit-transform: scaleX(1.5);
+  }
+
+  .mq-hat-stem {
+    display: block;
+  }
+
+  .mq-large-operator {
+    vertical-align: -0.2em;
+    padding: 0.2em;
+    text-align: center;
+
+    .mq-from,
+    big,
+    .mq-to {
+      display: block;
+    }
+    .mq-from,
+    .mq-to {
+      font-size: 80%;
+    }
+    .mq-from {
+      float: right; /* take out of normal flow to manipulate baseline */
+      width: 100%;
+    }
+  }
+
+  &,
+  .mq-editable-field {
+    cursor: text;
+    font-family: @symbola;
+  }
+
+  .mq-overarrow {
+    border-top: 1px solid black;
+    margin-top: 1px;
+    padding-top: 0.2em;
+
+    &:before {
+      display: block;
+      position: relative;
+      top: -0.34em;
+      font-size: 0.5em;
+      line-height: 0em;
+      content: "\27A4";
+      text-align: right;
+    }
+    &.mq-arrow-left:before {
+      -moz-transform: scaleX(-1);
+      -o-transform: scaleX(-1);
+      -webkit-transform: scaleX(-1);
+      transform: scaleX(-1);
+      filter: FlipH;
+      -ms-filter: "FlipH";
+    }
+  }
+
+  .mq-matrix {
+    vertical-align: middle;
+    margin-left: 0.1em;
+    margin-right: 0.1em;
+
+    table {
+      width: auto;
+      border-bottom: none;
+      border-spacing: 3px;
+      border-collapse: separate;
+      &.mq-rows-1 {
+        /* better alignment when there's just one row */
+        vertical-align: middle;
+        margin-bottom: 1px;
+      }
+    }
+
+    td {
+      border: none;
+      width: auto; /* defensive resets */
+      padding: 0.1em 0.3em;
+      vertical-align: baseline;
+    }
+  }
+}
+
+/*---matrixed.less-------------------------------------------------------------------------------------------------------------*/
+
+@import "./mixins/display";
+
+// We have to set an opaque background color for matrix-stretched
+// elements to anti-alias correctly, so we use the Chroma filter
+// on the immediate parent to make the solid background color
+// transparent.
+
+// See http://github.com/laughinghan/mathquill/wiki/Transforms
+// for more details.
+
+.mq-math-mode {
+  .mq-matrixed {
+    background: white;
+    .inline-block;
+  }
+  .mq-matrixed-container {
+    filter: progid:DXImageTransform.Microsoft.Chroma(color='white');
+    margin-top: -0.1em;
+  }
+}
+
+/*----selections.less------------------------------------------------------------------------------------------------------------*/
+
+// All these !important's are unfortunately necessary, because
+// pages using MathQuill who change the background color have to
+// have rules setting the background color of .mq-matrixed and
+// .mq-matrixed-container, and we need to guarantee that our rules
+// setting the background color of matrixed/containers inside
+// selections have higher specificity.
+
+// See http://github.com/laughinghan/mathquill/wiki/Transforms
+// for more details.
+
+.mq-math-mode,
+.mq-editable-field {
+  .mq-selection {
+    &,
+    & .mq-non-leaf,
+    & .mq-scaled {
+      background: #b4d5fe !important;
+      background: Highlight !important;
+      color: HighlightText;
+      border-color: HighlightText;
+    }
+
+    .mq-matrixed {
+      // The Chroma filter doesn't support the 'Highlight' keyword,
+      // but is only used in IE 8 and below anyway, so just use the
+      // default Windows highlight color. Even if the highlight color
+      // of the system has been customized, it's not a big deal,
+      // most of the solid blue area is chroma keyed, there'll just
+      // be a blue anti-aliased fringe around the matrix-filter-
+      // stretched text.
+
+      // If you use IE 8 or below and customized your highlight
+      // color, and after the effort I put into making everything
+      // else in MathQuill work in IE 8 and below have the *gall*
+      // to complain about the blue fringe that appears in selections
+      // around the otherwise beautifully stretched square roots and
+      // stuff, and you have no ideas for how to solve the problem,
+      // just a complaint, then I'd like to politely suggest that you
+      // go choke on a dick. Unless you're into that, in which case,
+      // go do something that would make you unhappy instead.
+
+      background: #39f !important;
+    }
+    .mq-matrixed-container {
+      filter: progid:DXImageTransform.Microsoft.Chroma(color='#3399FF') !important;
+    }
+
+    &.mq-blur {
+      &,
+      & .mq-non-leaf,
+      & .mq-scaled,
+      & .mq-matrixed {
+        background: #d4d4d4 !important;
+        color: black;
+        border-color: black;
+      }
+
+      .mq-matrixed-container {
+        filter: progid:DXImageTransform.Microsoft.Chroma(color='#D4D4D4') !important;
+      }
+    }
+  }
+}
+
+/*---textarea.less-------------------------------------------------------------------------------------------------------------*/
+
+@import "./mixins/css3";
+
+.mq-editable-field,
+.mq-math-mode {
+  .mq-textarea {
+    position: relative;
+
+    // TODO: why is this here?
+    .user-select(text);
+  }
+
+  .mq-textarea *,
+  .mq-selectable {
+    .user-select(text);
+
+    position: absolute; // the only way to hide the textarea *and* the
+    clip: rect(1em 1em 1em 1em); // blinking insertion point in IE
+
+    .transform(scale(0)); // the only way to hide the blinking blue cursor in iOS 8 #584
+
+    resize: none; // hotfix: https://code.google.com/p/chromium/issues/detail?id=355199#c1
+
+    width: 1px; // don't "stick out" invisibly from a math field,
+    height: 1px; // can affect ancestor's .scroll{Width,Height}
+
+    // Needed to fix a Safari 10 bug where box-sizing: border-box is
+    // preventing text from being copied.
+    // https://github.com/mathquill/mathquill/issues/686
+    box-sizing: content-box;
+  }
+}

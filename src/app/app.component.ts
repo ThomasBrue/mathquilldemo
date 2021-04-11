@@ -219,6 +219,8 @@ export class AppComponent implements AfterViewInit {
     this.buildRegularButton('\\intIndefinite', '7_int_v1.png'),
     this.buildRegularButton('\\deri', '2_frac_v2_mathrm.png'),
     this.buildRegularButton('\\deriNth', '2_frac_v2_mathrm.png'),
+
+    this.buildRegularButton('\\matrix', 'matrix'),
   ];
 
   latexToMath(str: string) {
