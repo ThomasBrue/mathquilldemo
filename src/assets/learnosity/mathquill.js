@@ -4657,7 +4657,7 @@ LatexCmds["int"] = LatexCmds.integral = P(SummationNotation, function (
   });
 
   LatexCmds["\u222b"] = LatexCmds["intx"] = LatexCmds.integral = P(
-    SummationNotation,
+    MathCommand,
     function (_, super_) {
       _.init = function () {
         var htmlTemplate =
@@ -4666,12 +4666,15 @@ LatexCmds["int"] = LatexCmds.integral = P(SummationNotation, function (
           '<span class="mq-supsub mq-non-leaf">' +
           '<span class="mq-sup"><span class="mq-sup-inner">&1</span></span>' +
           '<span class="mq-sub">&0</span>' +
-          '<span style="display:inline-block;width:0">&#8203</span>' +
+          '<span style="display:inline-block;width:0"></span>' +
           "</span>" +
-          "</span>";
+          '</span>'+
+          '<span>&2</span> <span>&nbsp; d</span>' +
+          '<span>&3</span>'
+          ;
         Symbol.prototype.init.call(this, "\\int ", htmlTemplate);
       };
-      _.createLeftOf = MathCommand.p.createLeftOf;
+     /*  _.createLeftOf = MathCommand.p.createLeftOf; */
     }
   );
 
@@ -4696,35 +4699,26 @@ LatexCmds["int"] = LatexCmds.integral = P(SummationNotation, function (
   LatexCmds["intDefinite"] = P(MathCommand, function (_, super_) {
     _.ctrlSeq = "\\intDefinite";
     _.htmlTemplate =
+          '<span class="mq-int mq-non-leaf">' +
+          "<big>&int;</big>" +
+          '<span class="mq-supsub mq-non-leaf">' +
+          '<span class="mq-sup"><span class="mq-sup-inner">&1</span></span>' +
+          '<span class="mq-sub">&0</span>' +
+          '<span style="display:inline-block;width:0"></span>' +
+          "</span>" +
+          '</span>'+
+          '<span>&2</span> <span>&nbsp; d</span>' +
+          '<span>&3</span>'
+          ;
 
-
-    '<span class="mq-int mq-non-leaf">' +
-    "<big>&int;</big>" +
-    '<span class="mq-supsub mq-non-leaf">' +
-    '<span class="mq-sup"><span class="mq-sup-inner">&1</span></span>' +
-    '<span class="mq-sub">&0</span>' +
-    '<span style="display:inline-block;width:0">&#8203</span>' +
-    "</span>" +
-    "</span>"+
-    "<span >&2</span> <span>&nbsp;</span>"+
-      "<span >&3</span>"
-    
-    ;
-
-/*       '<span class="mq-int mq-non-leaf"><big>&#8747;</big></span>' +
-      "<span>" +
-      "<span >&nbsp;</span>" +
-      "<span>&0</span>" +
-      "<span >&nbsp;d</span>" +
-      "<span>&1</span>" +
-      "</span>"+
-      "<span >&2</span> <span>&nbsp;</span>"+
-      "<span >&3</span>"
-      ; */
     _.textTemplate = ["(", ")/(", ")"];
-    _.finalizeTree = function () {
-      this.upInto = this.ends[R].upOutOf = this.ends[L];
-      this.downInto = this.ends[L].downOutOf = this.ends[R];
+
+    _.finalizeTree = function() {
+      this.downInto = this.ends[L];
+      this.upInto = this.ends[R];
+      this.ends[L].upOutOf = this.ends[R];
+      this.ends[R].downOutOf = this.ends[L];
+  
     };
   });
 
@@ -4747,24 +4741,11 @@ LatexCmds["int"] = LatexCmds.integral = P(SummationNotation, function (
   LatexCmds["deriNth"] = P(MathCommand, function (_, super_) {
     _.ctrlSeq = "\\deriNth";
     _.htmlTemplate =
-      /* '<span class="mq-fraction mq-non-leaf" style="border: 1px solid green;">' +
-      '<span style="display:inline-block">&0</span><span>&nbsp;</span>'  +
-      '<span style="display:inline-block">&1</span><span>&nbsp;</span>'  +
-      '<span style="display:inline-block">&2</span><span>&nbsp;</span>'  +
-      '<span style="display:inline-block">&3</span>'  +
-      '</span>' 
-      ;  */
-
-
-      
-
       '<span class="mq-fraction mq-non-leaf">' +
-      '<span class="mq-numerator">d</span>' +
-      '<span class="mq-denominator">d<span>&0</span></span>' +
+      '<span class="mq-numerator">d<span class="mq-supsub mq-non-leaf mq-sup-only"><span class="mq-sup">&2</span></span></span>' +
+      '<span class="mq-denominator">d<span>&0</span><span class="mq-supsub mq-non-leaf mq-sup-only"><span class="mq-sup">&1</span></span></span>' +
       '<span style="display:inline-block;width:0"></span>' +
       "</span>" +
-      "<span >&1</span> <span>&nbsp;</span>"+
-      "<span >&2</span> <span>&nbsp;</span>"+
       "<span >&3</span>"
       ;
 
