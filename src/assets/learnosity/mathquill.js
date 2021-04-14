@@ -4679,8 +4679,8 @@ LatexCmds["int"] = LatexCmds.integral = P(SummationNotation, function (
   );
 
   
-  LatexCmds["intIndefinite"] = P(MathCommand, function (_, super_) {
-    _.ctrlSeq = "\\intIndefinite";
+  LatexCmds["intIndef"] = P(MathCommand, function (_, super_) {
+    _.ctrlSeq = "\\intIndef";
     _.htmlTemplate =
       '<span class="mq-int mq-non-leaf"><big>&#8747;</big></span>' +
       "<span>" +
@@ -4696,8 +4696,8 @@ LatexCmds["int"] = LatexCmds.integral = P(SummationNotation, function (
     };
   });
 
-  LatexCmds["intDefinite"] = P(MathCommand, function (_, super_) {
-    _.ctrlSeq = "\\intDefinite";
+  LatexCmds["intDef"] = P(MathCommand, function (_, super_) {
+    _.ctrlSeq = "\\intDef";
     _.htmlTemplate =
           '<span class="mq-int mq-non-leaf">' +
           "<big>&int;</big>" +
@@ -4722,8 +4722,8 @@ LatexCmds["int"] = LatexCmds.integral = P(SummationNotation, function (
     };
   });
 
-  LatexCmds["deri"] = P(MathCommand, function (_, super_) {
-    _.ctrlSeq = "\\deri";
+  LatexCmds["deriOne"] = P(MathCommand, function (_, super_) {
+    _.ctrlSeq = "\\deriOne";
     _.htmlTemplate =
       '<span class="mq-fraction mq-non-leaf">' +
       '<span class="mq-numerator">d</span>' +

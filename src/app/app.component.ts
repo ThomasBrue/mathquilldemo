@@ -47,36 +47,13 @@ export class AppComponent implements AfterViewInit {
         case '\\': // nth root (Calculator Toolbar)
           this.MQ.MathField(this.mathField).write('\\sqrt[]{}');
           break;
-        case '?': // nth derivative (Calculus Toolbar)
-          this.MQ.MathField(this.mathField).write(
-            '\\frac{\\mathrm{d}^{n} }{\\mathrm{d} x^{n}}'
-          );
-          break;
-
-        case 'i': // Definite integral (Calculus Toolbar)
-          //   this.MQ.MathField(this.mathField).write("\\int_{}^{}");
-          //    this.MQ.MathField(this.mathField).write('\\inty');
-
-          //s  this.MQ.MathField(this.mathField).write('\\aaa');
-
-          this.MQ.MathField(this.mathField).cmd('\\intIndefinite');
-
-          //  this.MQ.MathField(this.mathField).keystroke('Left');
-          //  this.MQ.MathField(this.mathField).keystroke('Left');
-
-          /*   this.MQ.MathField(this.mathField).write('\\mathrm{ }');
-          this.MQ.MathField(this.mathField).write('\\quad  d');
-          this.MQ.MathField(this.mathField).write('\\mathrm{ }'); */
+        case 'i':
+          this.MQ.MathField(this.mathField).cmd('\\intIndef');
           break;
       }
     } else {
       switch (event.key) {
-        /* case "(":
-          this.MQ.MathField(this.mathField).write("\\left (");
-          break; */
-
         //----Keystroke Commands-----------------------------------------------------------------------------------------------------------------
-
         case '_':
           this.MQ.MathField(this.mathField).write('_{}');
           this.MQ.MathField(this.mathField).keystroke('Down');
@@ -86,7 +63,6 @@ export class AppComponent implements AfterViewInit {
           this.MQ.MathField(this.mathField).write(' \\overline{}');
           this.MQ.MathField(this.mathField).keystroke('Left');
           break;
-
         //----Calculator Toolbar----------------------------------------------------------------------------------------------------------------
         case '|': // Absolute value
           this.MQ.MathField(this.mathField).write('\\left |  \\right |');
@@ -129,11 +105,11 @@ export class AppComponent implements AfterViewInit {
         //----Calculus Toolbar---------------------------------------------------------------------------------------------------------------------
         case '?': // derivative
           //   this.MQ.MathField(this.mathField).write('\\frac{d}{dx}');
-          this.MQ.MathField(this.mathField).cmd('\\deri');
+          this.MQ.MathField(this.mathField).cmd('\\deriOne');
           break;
 
         case '&': // indefinite integral (Calculus Toolbar)
-          this.MQ.MathField(this.mathField).write('\\intx');
+          this.MQ.MathField(this.mathField).write('\\intIndef');
           break;
 
         default:
@@ -204,10 +180,6 @@ export class AppComponent implements AfterViewInit {
     this.buildWriteButton('^{}\\textrm{}', '9_textrm_v2_up.png'),
     this.buildWriteButton('_{}^{}\\textrm{}', '9_textrm_v3_upDown.png'),
     this.buildWriteButton('_{}', '11_subscript.png'),
-
-    /*     this.buildRegularButton('\\bigcap', '5_bigcap_v1.png'),
-    this.buildWriteButton('\\bigcap_{}^{}', '5_bigcap_v2.png'), */
-
     //--------------------------------------------------------------------
 
     this.buildOperationalButton('Backspace', 'myBackspace'),
@@ -216,10 +188,10 @@ export class AppComponent implements AfterViewInit {
     this.buildOperationalButton('Up', 'Up'),
     // mathField.keystroke('Shift-Left');
 
-    this.buildRegularButton('\\intIndefinite', '7_int_v1.png'),
-    this.buildRegularButton('\\intDefinite', '7_int_v2.png'),
+    this.buildRegularButton('\\intIndef', '7_int_v1.png'),
+    this.buildRegularButton('\\intDef', '7_int_v2.png'),
 
-    this.buildRegularButton('\\deri', '2_frac_v2_mathrm.png'),
+    this.buildRegularButton('\\deriOne', '2_frac_v2_mathrm.png'),
     this.buildRegularButton('\\deriNth', '12_deriNth_v1.png'),
 
     this.buildRegularButton('\\matrix', 'matrix'),
@@ -239,20 +211,6 @@ export class AppComponent implements AfterViewInit {
   ];
 
   latexToMath(str: string) {
-    console.log('LatexToMath');
-
-    console.log('STR: ', str);
-
-    //---------------KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK
-    //    intx   vs   int
-    //   insert x after int when integral is definite
-
-    //   \int_{ }^{ } --> int
-
-    //   \int_1^(x)  -->   \intx_1^(x)
-    //   \int_4^{3+4}  -->   \intx_4^{3+4}
-    //   \int_{4+7}^{3+4}    --> \intx_{4+7}^{3+4}
-
     this.buttons.push(
       this.buildWriteButton(str, 'AAAA')
       //     this.buildWriteButton('\\int_{ }^{ }k=\\intx_2^4f(x)', 'AAAA')
