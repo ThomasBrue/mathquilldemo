@@ -2,6 +2,8 @@ import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { env, mainModule } from 'process';
 import { HostListener } from '@angular/core';
 import * as nerdamer from 'nerdamer/all';
+import { ConverterService } from './converter.service';
+//import { ConverterService } from './converter.service';
 
 enum ButtonType {
   OPERATIONAL = 'OPERATIONAL',
@@ -23,14 +25,24 @@ export class AppComponent implements AfterViewInit {
 
   myLatex = '';
   mathFieldXXX;
-  simplifiedLatex = '';
+  resultLatex = '';
+
+  constructor(private converterService: ConverterService) {
+    //--Evaluation----evaluate()------------------------------------------------------------------------------------
+    console.log(nerdamer('x^2', { x: '2' }).evaluate().text('fractions')); // 4
+    //--Differentiation----diff()------------------------------------------------------------------------------------
+    console.log(nerdamer('diff(x^2,x)').text('fractions')); // 2*x
+    //--integration-Indefinite----integrate()------------------------------------------------------------------------------------
+    console.log(nerdamer('integrate(cos(x),x)').text('fractions')); // sin(x)
+    //--integration-Definite----integrate()------------------------------------------------------------------------------------
+    console.log(nerdamer('defint(e^(cos(x)), 1, 2)').text('decimals', 7)); // 1.112780
+    //--simplify----simplify()------------------------------------------------------------------------------------------------
+    console.log(nerdamer('simplify((x^2+4*x-45)/(x^2+x-30))').toString()); // (6+x)^(-1)*(9+x)
+  }
+  // latexSpan = document.getElementById('latex');
 
   // Link to Github Mathquill-Matrix:
   // https://github.com/Learnosity/mathquill/blob/matrix/src/commands/math/commands.js
-
-  setFocus() {}
-
-  /*   $('.mathquill-editable textarea').trigger(customKeyDownEvent); */
 
   @HostListener('document:keydown', ['$event'])
   handleKeydownEvent(event: KeyboardEvent) {
@@ -161,7 +173,8 @@ export class AppComponent implements AfterViewInit {
     }
 
     this.myLatex = this.mathFieldXXX.latex();
-    this.simplifiedLatex = nerdamer(`simplify(${this.myLatex})`).toString();
+
+    this.resultLatex = this.converterService.convertLatex(this.myLatex);
   }
 
   MQ = null;
@@ -237,20 +250,6 @@ export class AppComponent implements AfterViewInit {
     );
   }
 
-  constructor() {
-    //--Evaluation----evaluate()------------------------------------------------------------------------------------
-    console.log(nerdamer('x^2', { x: '2' }).evaluate().text('fractions')); // 4
-    //--Differentiation----diff()------------------------------------------------------------------------------------
-    console.log(nerdamer('diff(x^2,x)').text('fractions')); // 2*x
-    //--integration-Indefinite----integrate()------------------------------------------------------------------------------------
-    console.log(nerdamer('integrate(cos(x),x)').text('fractions')); // sin(x)
-    //--integration-Definite----integrate()------------------------------------------------------------------------------------
-    console.log(nerdamer('defint(e^(cos(x)), 1, 2)').text('decimals', 7)); // 1.112780
-    //--simplify----simplify()------------------------------------------------------------------------------------------------
-    console.log(nerdamer('simplify((x^2+4*x-45)/(x^2+x-30))').toString()); // (6+x)^(-1)*(9+x)
-  }
-  // latexSpan = document.getElementById('latex');
-
   ngAfterViewInit() {
     this.mathField = document.getElementById('math-field');
     let latexSpan = document.getElementById('latex');
@@ -289,7 +288,7 @@ export class AppComponent implements AfterViewInit {
 
     this.myLatex = this.mathFieldXXX.latex();
 
-    this.simplifiedLatex = nerdamer(`simplify(${this.myLatex})`).toString();
+    this.resultLatex = this.converterService.convertLatex(this.myLatex);
   }
 
   private buildRegularButton(content: string, displayContent?: string) {
