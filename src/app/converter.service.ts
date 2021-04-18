@@ -37,7 +37,7 @@ export class ConverterService {
     }
     latexInput = latexInput.replace(/{/g, '(');
     latexInput = latexInput.replace(/}/g, ')');
-    latexInput = latexInput.replace(/cdot/g, '*');
+    latexInput = latexInput.replace(/\\cdot/g, '*');
     return latexInput;
   }
 
