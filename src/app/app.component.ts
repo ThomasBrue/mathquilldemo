@@ -1,6 +1,7 @@
 import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { env, mainModule } from 'process';
 import { HostListener } from '@angular/core';
+import * as nerdamer from 'nerdamer/all';
 
 enum ButtonType {
   OPERATIONAL = 'OPERATIONAL',
@@ -19,6 +20,10 @@ export class AppComponent implements AfterViewInit {
   specialKey_2: String;
 
   latexToConvert = '';
+
+  myLatex = '';
+  mathFieldXXX;
+  simplifiedLatex = '';
 
   // Link to Github Mathquill-Matrix:
   // https://github.com/Learnosity/mathquill/blob/matrix/src/commands/math/commands.js
@@ -44,6 +49,15 @@ export class AppComponent implements AfterViewInit {
 
     if (this.specialKey_1 == 'Control') {
       switch (event.key) {
+        case ',':
+          this.MQ.MathField(this.mathField).keystroke('Right');
+          this.MQ.MathField(this.mathField).keystroke('Right');
+          this.MQ.MathField(this.mathField).keystroke('Right');
+          this.MQ.MathField(this.mathField).keystroke('Right');
+          this.MQ.MathField(this.mathField).keystroke('Right');
+          this.MQ.MathField(this.mathField).keystroke('Right');
+          this.MQ.MathField(this.mathField).write('\\rightarrow');
+          break;
         case '\\': // nth root (Calculator Toolbar)
           this.MQ.MathField(this.mathField).write('\\sqrt[]{}');
           break;
@@ -145,6 +159,9 @@ export class AppComponent implements AfterViewInit {
       this.specialKey_1 = '';
       this.specialKey_2 = '';
     }
+
+    this.myLatex = this.mathFieldXXX.latex();
+    this.simplifiedLatex = nerdamer(`simplify(${this.myLatex})`).toString();
   }
 
   MQ = null;
@@ -180,6 +197,9 @@ export class AppComponent implements AfterViewInit {
     this.buildWriteButton('^{}\\textrm{}', '9_textrm_v2_up.png'),
     this.buildWriteButton('_{}^{}\\textrm{}', '9_textrm_v3_upDown.png'),
     this.buildWriteButton('_{}', '11_subscript.png'),
+
+    this.buildWriteButton('\\rightarrow', '13_rightArrow_v1.png'),
+
     //--------------------------------------------------------------------
 
     this.buildOperationalButton('Backspace', 'myBackspace'),
@@ -217,24 +237,42 @@ export class AppComponent implements AfterViewInit {
     );
   }
 
-  constructor() {}
+  constructor() {
+    //--Evaluation----evaluate()------------------------------------------------------------------------------------
+    console.log(nerdamer('x^2', { x: '2' }).evaluate().text('fractions')); // 4
+    //--Differentiation----diff()------------------------------------------------------------------------------------
+    console.log(nerdamer('diff(x^2,x)').text('fractions')); // 2*x
+    //--integration-Indefinite----integrate()------------------------------------------------------------------------------------
+    console.log(nerdamer('integrate(cos(x),x)').text('fractions')); // sin(x)
+    //--integration-Definite----integrate()------------------------------------------------------------------------------------
+    console.log(nerdamer('defint(e^(cos(x)), 1, 2)').text('decimals', 7)); // 1.112780
+    //--simplify----simplify()------------------------------------------------------------------------------------------------
+    console.log(nerdamer('simplify((x^2+4*x-45)/(x^2+x-30))').toString()); // (6+x)^(-1)*(9+x)
+  }
   // latexSpan = document.getElementById('latex');
 
   ngAfterViewInit() {
     this.mathField = document.getElementById('math-field');
-    var latexSpan = document.getElementById('latex');
+    let latexSpan = document.getElementById('latex');
+
     this.MQ = (window as any).MathQuill.getInterface(2);
-    var mathField = this.MQ.MathField(this.mathField, {
+    this.mathFieldXXX = this.MQ.MathField(this.mathField, {
       substituteTextarea: () => {
         return document.getElementById('substitue-id');
       },
       spaceBehavesLikeTab: true,
-      handlers: {
+      /*       handlers: {
         edit: function () {
-          latexSpan.textContent = mathField.latex();
+          latexSpan.textContent = this.mathFieldXXX.latex();
         },
-      },
+      }, */
     });
+
+    /*     setTimeout(() => {
+      console.log('GGG: ', this.mathFieldXXX.latex());
+
+      this.myLatex = this.mathFieldXXX.latex();
+    }, 5000); */
   }
 
   onClickMathButton(e: any, button) {
@@ -248,6 +286,10 @@ export class AppComponent implements AfterViewInit {
     }
     this.MQ.MathField(this.mathField).focus();
     e.preventDefault();
+
+    this.myLatex = this.mathFieldXXX.latex();
+
+    this.simplifiedLatex = nerdamer(`simplify(${this.myLatex})`).toString();
   }
 
   private buildRegularButton(content: string, displayContent?: string) {
