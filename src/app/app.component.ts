@@ -241,6 +241,8 @@ export class AppComponent implements AfterViewInit {
       '\\begin{matrix}&&&\\\\&\\\\&\\\\&\\end{matrix}',
       'writeMatrix'
     ),
+
+    this.buildWriteButton('\\deriOne{x}{x^2+\\deriOne{x}{x^3}}', 'AAAA'),
   ];
 
   latexToMath(str: string) {

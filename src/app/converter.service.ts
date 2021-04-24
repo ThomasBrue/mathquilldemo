@@ -67,100 +67,124 @@ export class ConverterService {
   }
 
   private derivativeConverter(str: string): string {
-    console.log('IN: ', str);
-    let brackedCount = 0;
-    let start: number = str.indexOf('\\deriOne') + 8;
-    let fieldCount = 0;
+    while (str.indexOf('\\deriOne') >= 0) {
+      console.log('IN: ', str);
+      let brackedCount = 0;
+      let start: number = str.indexOf('\\deriOne') + 8;
+      let fieldCount = 0;
 
-    for (let i = start; i < str.length; i++) {
-      if (str.charAt(i) == '(') {
-        brackedCount++;
-      } else if (str.charAt(i) == ')') {
-        brackedCount--;
-      }
+      for (let i = start; i < str.length; i++) {
+        if (str.charAt(i) == '(') {
+          brackedCount++;
+        } else if (str.charAt(i) == ')') {
+          brackedCount--;
+        }
 
-      if (brackedCount == 0) {
-        fieldCount++;
-      }
+        if (brackedCount == 0) {
+          fieldCount++;
+        }
 
-      if (fieldCount == 2) {
-        if (str.substring(start).charAt(0) === '(') {
-          if (str.substring(start + 1, i).indexOf('\\deriOne') >= 0) {
-            str =
+        if (fieldCount == 2) {
+          if (str.substring(start).charAt(0) === '(') {
+            if (str.substring(start + 1, i).indexOf('\\deriOne') >= 0) {
+              //-----------------------------------------------------------------------------
+
+              console.log('Left: ', str.substring(0, start + 4));
+              console.log('Inner: ', str.substring(start + 4, i));
+              console.log('Right: ', str.substring(i, str.length));
+              //---------------------------------------------------
+
+              //    str = this.derivativeConverter(str.substring(start + 4, i));
+              let middle = this.derivativeConverter(
+                str.substring(start + 4, i)
+              );
+
+              str =
+                str.substring(0, start + 4) +
+                middle +
+                str.substring(i, str.length);
+
+              console.log('NEW_STR: ', str);
+
+              console.log(str.indexOf('\\deriOne') >= 0);
+
+              /*             str =
               str.substring(0, start) +
               nerdamer(
                 `diff(${this.derivativeConverter(
-                  str.substring(start + 1, i)
+                  str.substring(start + 2, i)
                 )},x)`
               ).text('fractions') +
-              str.substring(i + 1, str.length);
-          } else {
-            //------------------------------------------------------------------------
-            let fieldInput_1 = '';
-            let fieldInput_2 = '';
+              str.substring(i + 1, str.length); */
+            } else {
+              //------------------------------------------------------------------------
+              let fieldInput_1 = '';
+              let fieldInput_2 = '';
 
-            console.log('AAA: ', str.substring(start, i + 1));
-            let mySubString = str.substring(start, i + 1);
+              console.log('AAA: ', str.substring(start, i + 1));
+              let mySubString = str.substring(start, i + 1);
 
-            brackedCount = 0;
-            hello: for (let k = 0; k < mySubString.length; k++) {
-              if (mySubString.charAt(k) == '(') {
-                brackedCount++;
-              } else if (mySubString.charAt(k) == ')') {
-                brackedCount--;
-              }
-
-              if (brackedCount == 0) {
-                console.log('BBB: ', mySubString.substring(1, k));
-                fieldInput_1 = mySubString.substring(1, k);
-                console.log('XXX: ', mySubString.substring(k + 1));
-
-                brackedCount = 0;
-                let secondSubString = mySubString.substring(k + 1);
-                console.log('secondSubString: ', secondSubString);
-                //   break;
-                for (let j = 0; j < secondSubString.length; j++) {
-                  if (secondSubString.charAt(j) == '(') {
-                    brackedCount++;
-                  } else if (secondSubString.charAt(j) == ')') {
-                    brackedCount--;
-                  }
-
-                  // console.log('LOLLL: ', mySubString.substring(1, j));
-
-                  if (brackedCount == 0) {
-                    console.log('CCC: ', secondSubString.substring(1, j));
-                    fieldInput_2 = secondSubString.substring(1, j);
-
-                    break hello;
-                  }
+              brackedCount = 0;
+              hello: for (let k = 0; k < mySubString.length; k++) {
+                if (mySubString.charAt(k) == '(') {
+                  brackedCount++;
+                } else if (mySubString.charAt(k) == ')') {
+                  brackedCount--;
                 }
 
-                //----------------------------------------------
+                if (brackedCount == 0) {
+                  console.log('BBB: ', mySubString.substring(1, k));
+                  fieldInput_1 = mySubString.substring(1, k);
+                  console.log('XXX: ', mySubString.substring(k + 1));
+
+                  brackedCount = 0;
+                  let secondSubString = mySubString.substring(k + 1);
+                  console.log('secondSubString: ', secondSubString);
+                  //   break;
+                  for (let j = 0; j < secondSubString.length; j++) {
+                    if (secondSubString.charAt(j) == '(') {
+                      brackedCount++;
+                    } else if (secondSubString.charAt(j) == ')') {
+                      brackedCount--;
+                    }
+
+                    // console.log('LOLLL: ', mySubString.substring(1, j));
+
+                    if (brackedCount == 0) {
+                      console.log('CCC: ', secondSubString.substring(1, j));
+                      fieldInput_2 = secondSubString.substring(1, j);
+
+                      break hello;
+                    }
+                  }
+
+                  //----------------------------------------------
+                }
               }
-            }
 
-            console.log('fieldIput_1: ', fieldInput_1);
-            console.log('fieldIput_2: ', fieldInput_2);
+              console.log('fieldIput_1: ', fieldInput_1);
+              console.log('fieldIput_2: ', fieldInput_2);
 
-            str =
-              str.substring(0, start) +
-              nerdamer(`diff(${fieldInput_2},${fieldInput_1})`).text(
-                'fractions'
-              ) +
-              str.substring(i + 1, str.length);
+              str =
+                str.substring(0, start) +
+                nerdamer(`diff(${fieldInput_2},${fieldInput_1})`).text(
+                  'fractions'
+                ) +
+                str.substring(i + 1, str.length);
 
-            /*             str =
+              /*             str =
               str.substring(0, start) +
               nerdamer(`diff(${str.substring(start + 1, i)},x)`).text(
                 'fractions'
               ) +
               str.substring(i + 1, str.length); */
+              str = str.replace('\\deriOne', ' ');
+            }
           }
-        }
 
-        str = str.replace('deriOne', ' ');
-        break;
+          //    str = str.replace('\\deriOne', ' ');
+          break;
+        }
       }
     }
     console.log('OUT: ', str);
