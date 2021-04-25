@@ -243,6 +243,8 @@ export class AppComponent implements AfterViewInit {
     ),
 
     this.buildWriteButton('\\deriOne{x}{x^2+\\deriOne{x}{x^3}}', 'AAAA'),
+
+    this.buildWriteButton('\\intIndef{x^2+\\intIndef{x^3}{x}}{x}', 'BBBB'),
   ];
 
   latexToMath(str: string) {
