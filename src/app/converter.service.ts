@@ -11,12 +11,17 @@ export class ConverterService {
     latexInput = this.convertFraction(latexInput);
 
     latexInput = this.cleanLatex(latexInput);
-    latexInput = this.fractionConverter(latexInput);
 
-    latexInput = this.derivativeConverter(latexInput);
-    latexInput = this.integralConverter(latexInput);
+    if (this.checkBracketClosure(latexInput)) {
+      latexInput = this.fractionConverter(latexInput);
 
-    latexInput = this.simplifyLatex(latexInput);
+      latexInput = this.derivativeConverter(latexInput);
+      latexInput = this.integralConverter(latexInput);
+
+      latexInput = this.simplifyLatex(latexInput);
+    } else {
+      latexInput = '';
+    }
 
     return latexInput;
   }
@@ -40,6 +45,22 @@ export class ConverterService {
     latexInput = latexInput.replace(/}/g, ')');
     latexInput = latexInput.replace(/\\cdot/g, '*');
     return latexInput;
+  }
+
+  private checkBracketClosure(str: string): boolean {
+    let brackedCount = 0;
+    for (let i = 0; i < str.length; i++) {
+      if (str.charAt(i) == '(') {
+        brackedCount++;
+      } else if (str.charAt(i) == ')') {
+        brackedCount--;
+      }
+    }
+    if (brackedCount !== 0) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   private fractionConverter(str: string): string {
@@ -230,6 +251,10 @@ export class ConverterService {
       //-------------to be deleted ... just for dev purpose
       //   str = str.replace('\\intIndef', ' ');
     }
+
+    console.log('OUT: ', str);
+    console.log('------------------------------- ');
+
     return str;
   }
 }
