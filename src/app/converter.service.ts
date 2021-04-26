@@ -170,24 +170,22 @@ export class ConverterService {
           brackedCount--;
         }
 
-        //    console.log(str.charAt(i), brackedCount);
-
         if (brackedCount == 0) {
           fieldCount++;
         }
 
+        console.log(str.charAt(i), brackedCount, fieldCount);
+
         if (fieldCount == 2) {
-          if (str.substring(start + 2, i).indexOf('\\intIndef') >= 0) {
-            console.log('input for Integral: ', str.substring(start + 5, i));
+          if (str.substring(start, i).indexOf('\\intIndef') >= 0) {
+            let middle = this.integralConverter(str.substring(start + 1, i));
 
-            let middle = this.integralConverter(str.substring(start + 5, i));
-
-            console.log('Left: ', str.substring(0, start + 5));
+            console.log('Left: ', str.substring(0, start + 1));
             console.log('Middle: ', middle);
             console.log('Right: ', str.substring(i, str.length));
 
             str =
-              str.substring(0, start + 5) +
+              str.substring(0, start + 1) +
               middle +
               str.substring(i, str.length);
 
@@ -195,6 +193,8 @@ export class ConverterService {
           } else {
             let fieldInput_1 = '';
             let fieldInput_2 = '';
+            console.log('Why: ', str);
+
             let mySubString = str.substring(start, i + 1);
 
             console.log('mySubString: ', mySubString);
@@ -225,6 +225,10 @@ export class ConverterService {
                 }
               }
             }
+
+            console.log('fieldInput_1: ', fieldInput_1);
+            console.log('fieldInput_2: ', fieldInput_2);
+
             console.log('111: ', str.substring(0, start + 5));
             console.log(
               '222: ',
