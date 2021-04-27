@@ -108,6 +108,19 @@ export class ConverterService {
               str.substring(0, start + 4) +
               middle +
               str.substring(i, str.length);
+          } else if (str.substring(start + 1, i).indexOf('\\intIndef') >= 0) {
+            let middle = this.integralConverter(str.substring(start + 1, i));
+
+            console.log('Left: ', str.substring(0, start + 1));
+            console.log('Middle: ', middle);
+            console.log('Right: ', str.substring(i, str.length));
+
+            str =
+              str.substring(0, start + 1) +
+              middle +
+              str.substring(i, str.length);
+
+            console.log('INNER_OUT: ', str);
           } else {
             let fieldInput_1 = '';
             let fieldInput_2 = '';
@@ -190,6 +203,13 @@ export class ConverterService {
               str.substring(i, str.length);
 
             console.log('INNER_OUT: ', str);
+          } else if (str.substring(start, i).indexOf('\\deriOne') >= 0) {
+            let middle = this.derivativeConverter(str.substring(start + 4, i));
+
+            str =
+              str.substring(0, start + 4) +
+              middle +
+              str.substring(i, str.length);
           } else {
             let fieldInput_1 = '';
             let fieldInput_2 = '';
