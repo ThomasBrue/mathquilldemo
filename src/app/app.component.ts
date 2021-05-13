@@ -94,10 +94,10 @@ export class AppComponent implements AfterViewInit {
           this.MQ.MathField(this.mathField).write('\\left |  \\right |');
           this.MQ.MathField(this.mathField).keystroke('Left');
           break;
-
+        /* 
         case ':': // Definition
           this.MQ.MathField(this.mathField).write(':=');
-          break;
+          break; */
 
         case '=': // Evaluate numerically
           this.MQ.MathField(this.mathField).write('=');
@@ -159,8 +159,8 @@ export class AppComponent implements AfterViewInit {
   }
 
   myFunction(keyBoardInput: any) {
-    this.MQ.MathField(this.mathField).write(keyBoardInput);
-    this.MQ.MathField(this.mathField).focus();
+    //  this.MQ.MathField(this.mathField).write(keyBoardInput);
+    //  this.MQ.MathField(this.mathField).focus();
   }
 
   @HostListener('document:keyup', ['$event'])
@@ -260,11 +260,11 @@ export class AppComponent implements AfterViewInit {
 
     this.MQ = (window as any).MathQuill.getInterface(2);
     this.mathFieldXXX = this.MQ.MathField(this.mathField, {
-      substituteTextarea: () => {
+      /* substituteTextarea: () => {
         return document.getElementById('substitue-id');
-      },
+      }, */
       spaceBehavesLikeTab: true,
-      /*       handlers: {
+      /* handlers: {
         edit: function () {
           latexSpan.textContent = this.mathFieldXXX.latex();
         },

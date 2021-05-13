@@ -1523,7 +1523,7 @@ var Parser = P(function(_, super_, Parser) {
   
       var textarea = jQuery(el);
       var target = jQuery(handlers.container || textarea);
-  
+
       // checkTextareaFor() is called after key or clipboard events to
       // say "Hey, I think something was just typed" or "pasted" etc,
       // so that at all subsequent opportune times (next event or timeout),
@@ -2886,6 +2886,12 @@ Controller.open(function(_) {
       return node.seek(pageX, cursor);
     };
     _.chToCmd = function(ch, options) {
+      console.log("return VanillaSymbol: ", ch)
+      if(ch == '\\' || ch == '?'){
+        console.log("overwrite \\ to empty string")
+          ch = "";
+      }
+
       var cons;
       // exclude f because it gets a dedicated command with more spacing
       if (ch.match(/^[a-eg-zA-Z]$/))
@@ -2898,8 +2904,8 @@ Controller.open(function(_) {
         return LatexCmds['×'](ch);
       else if (cons = CharCmds[ch] || LatexCmds[ch])
         return cons(ch);
-      else
-        return VanillaSymbol(ch);
+      else     
+        return VanillaSymbol(ch);   
     };
     _.write = function(cursor, ch) {
       var cmd = this.chToCmd(ch, cursor.options);
@@ -3590,7 +3596,7 @@ Controller.open(function(_) {
  LatexCmds.perp = LatexCmds.perpendicular = bind(VanillaSymbol,'\\perp ','&perp;');
  LatexCmds.nabla = LatexCmds.del = bind(VanillaSymbol,'\\nabla ','&nabla;');
  LatexCmds.hbar = bind(VanillaSymbol,'\\hbar ','&#8463;');
- 
+
  LatexCmds.AA = LatexCmds.Angstrom = LatexCmds.angstrom =
    bind(VanillaSymbol,'\\text\\AA ','&#8491;');
  
@@ -4152,6 +4158,10 @@ Controller.open(function(_) {
   });
   
   LatexCmds['+'] = bind(PlusMinus, '+', '+');
+
+  //----custom colon (\\) element-----------------------------------------------------------------------------
+  LatexCmds[':'] = bind(PlusMinus, ':=', ':=');
+
   //yes, these are different dashes, I think one is an en dash and the other is a hyphen
   LatexCmds['–'] = LatexCmds['-'] = bind(PlusMinus, '-', '&minus;');
   LatexCmds['±'] = LatexCmds.pm = LatexCmds.plusmn = LatexCmds.plusminus =
