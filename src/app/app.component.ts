@@ -99,7 +99,7 @@ export class AppComponent implements AfterViewInit {
           this.MQ.MathField(this.mathField).write(':=');
           break; */
 
-        case '=': // Evaluate numerically
+        /*         case '=': // Evaluate numerically
           this.MQ.MathField(this.mathField).write('=');
           break;
 
@@ -110,12 +110,12 @@ export class AppComponent implements AfterViewInit {
 
         case '*': // Multiplication
           this.MQ.MathField(this.mathField).write('\\cdot');
-          break;
+          break; */
 
-        case 'Dead': // Exponentiation
+        /* case 'Dead': // Exponentiation
           this.MQ.MathField(this.mathField).write('^{}');
           this.MQ.MathField(this.mathField).keystroke('Up');
-          break;
+          break; */
 
         case "'": // Parentheses
           //  this.MQ.MathField(this.mathField).write("( )");
