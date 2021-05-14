@@ -47,16 +47,10 @@ export class AppComponent implements AfterViewInit {
   @HostListener('document:keydown', ['$event'])
   handleKeydownEvent(event: KeyboardEvent) {
     console.log('Keydown: ', event.key);
-    if (this.specialKey_1 == '') {
-      if (event.key === 'Shift') {
-        this.specialKey_1 = event.key;
-      } else if (event.key === 'Alt') {
-        this.specialKey_1 = event.key;
-      } else if (event.key === 'Control') {
-        this.specialKey_1 = event.key;
-      }
-    } else if (this.specialKey_1 == 'Control' && event.key == 'AltGraph') {
-      this.specialKey_1 = 'Control';
+    if (this.specialKey_1 == '' && event.key === 'Control') {
+      this.specialKey_1 = event.key;
+    } else if (this.specialKey_2 == '' && event.key === 'AltGraph') {
+      this.specialKey_2 = event.key;
     }
 
     if (this.specialKey_1 == 'Control') {
@@ -94,28 +88,6 @@ export class AppComponent implements AfterViewInit {
           this.MQ.MathField(this.mathField).write('\\left |  \\right |');
           this.MQ.MathField(this.mathField).keystroke('Left');
           break;
-        /* 
-        case ':': // Definition
-          this.MQ.MathField(this.mathField).write(':=');
-          break; */
-
-        /*         case '=': // Evaluate numerically
-          this.MQ.MathField(this.mathField).write('=');
-          break;
-
-        case '/': // Division
-          this.MQ.MathField(this.mathField).write('\\frac{}{}');
-          this.MQ.MathField(this.mathField).keystroke('Up');
-          break;
-
-        case '*': // Multiplication
-          this.MQ.MathField(this.mathField).write('\\cdot');
-          break; */
-
-        /* case 'Dead': // Exponentiation
-          this.MQ.MathField(this.mathField).write('^{}');
-          this.MQ.MathField(this.mathField).keystroke('Up');
-          break; */
 
         case "'": // Parentheses
           //  this.MQ.MathField(this.mathField).write("( )");
@@ -167,8 +139,9 @@ export class AppComponent implements AfterViewInit {
   handleKeyupEvent(event: KeyboardEvent) {
     console.log('Keyup: ', event.key);
 
-    if (event.key == 'Shift' || event.key == 'Alt' || event.key == 'Control') {
+    if (event.key == 'Control') {
       this.specialKey_1 = '';
+    } else if (event.key == 'AltGraph') {
       this.specialKey_2 = '';
     }
 
