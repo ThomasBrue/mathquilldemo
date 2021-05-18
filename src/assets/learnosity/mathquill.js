@@ -1047,14 +1047,14 @@ function getInterface(v) {
 
       var contents = el.addClass(classNames).contents().detach();
       root.jQ =
-        $('<span class="mq-root-block"/>').attr(mqBlockId, root.id).appendTo(el);
+        $('<span class="mq-root-block" style="padding: 10px;"/>').attr(mqBlockId, root.id).appendTo(el);
       this.latex(contents.text());
 
       this.revert = function() {
         return el.empty().unbind('.mathquill')
         .removeClass('mq-editable-field mq-math-mode mq-text-mode')
         .append(contents);
-      };
+      };  
     };
     _.config = function(opts) { config(this.__options, opts); return this; };
     _.el = function() { return this.__controller.container[0]; };
@@ -2886,8 +2886,8 @@ Controller.open(function(_) {
       return node.seek(pageX, cursor);
     };
     _.chToCmd = function(ch, options) {
-      console.log("return VanillaSymbol: ", ch)
-      if(ch == '\\' || ch == '?'){
+  //    REPLACE key-input with empty string
+      if(ch == '\\' || ch == '?' || ch == '#' || ch == '&'){
         console.log("overwrite \\ to empty string")
           ch = "";
       }
@@ -3629,7 +3629,7 @@ Controller.open(function(_) {
  
  LatexCmds.to = bind(BinaryOperator,'\\to ','&rarr;');
  
- LatexCmds.rarr = LatexCmds.rightarrow = bind(VanillaSymbol,'\\rightarrow ','&rarr;');
+ LatexCmds.rarr = LatexCmds.rightarrow = bind(VanillaSymbol,'\\rightarrow ','&nbsp; &rarr; &nbsp;');
  
  LatexCmds.implies = bind(BinaryOperator,'\\Rightarrow ','&rArr;');
  
@@ -4717,7 +4717,7 @@ LatexCmds["int"] = LatexCmds.integral = P(SummationNotation, function (
           '<span style="display:inline-block;width:0"></span>' +
           "</span>" +
           '</span>'+
-          '<span>&2</span> <span>&nbsp; d</span>' +
+          '<span>&2</span> <span style="padding-left: 5px;">d</span>' +
           '<span>&3</span>'
           ;
 
@@ -5148,7 +5148,7 @@ LatexCmds.MathQuillMathField = P(MathCommand, function(_, super_) {
   _.ctrlSeq = '\\MathQuillMathField';
   _.htmlTemplate =
       '<span class="mq-editable-field">'
-    +   '<span class="mq-root-block">&0</span>'
+    +   '<span class="mq-root-block" >&0</span>'
     + '</span>'
   ;
   _.parser = function() {

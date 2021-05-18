@@ -1,9 +1,11 @@
 import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { env, mainModule } from 'process';
 import { HostListener } from '@angular/core';
-import * as nerdamer from 'nerdamer/all';
+// import * as nerdamer from 'nerdamer/all';
 import { ConverterService } from './converter.service';
 //import { ConverterService } from './converter.service';
+//import * as math from 'mathjs';
+//import * as _ from 'lodash';
 
 enum ButtonType {
   OPERATIONAL = 'OPERATIONAL',
@@ -17,9 +19,8 @@ enum ButtonType {
 })
 export class AppComponent implements AfterViewInit {
   title = 'mathquill';
-  normalKey: any;
-  specialKey_1: String;
-  specialKey_2: String;
+  //  normalKey: any;
+  specialKey_1: String = '';
 
   latexToConvert = '';
 
@@ -27,8 +28,13 @@ export class AppComponent implements AfterViewInit {
   mathFieldXXX;
   resultLatex = '';
 
+  myResultString = '2x+4^x+7';
+
   constructor(private converterService: ConverterService) {
-    //--Evaluation----evaluate()------------------------------------------------------------------------------------
+    /////////MATH_JS//////////////////////////////////////////////////////////////////////////////////////
+    // math.evaluate('1.2 * (2 + 4.5)');
+    ///////NERDAMER/////////////////////////////////////////////////////////////////////////////////////
+    /*     //--Evaluation----evaluate()------------------------------------------------------------------------------------
     console.log(nerdamer('x^2', { x: '2' }).evaluate().text('fractions')); // 4
     //--Differentiation----diff()------------------------------------------------------------------------------------
     console.log(nerdamer('diff(x^2,x)').text('fractions')); // 2*x
@@ -37,7 +43,7 @@ export class AppComponent implements AfterViewInit {
     //--integration-Definite----integrate()------------------------------------------------------------------------------------
     console.log(nerdamer('defint(e^(cos(x)), 1, 2)').text('decimals', 7)); // 1.112780
     //--simplify----simplify()------------------------------------------------------------------------------------------------
-    console.log(nerdamer('simplify((x^2+4*x-45)/(x^2+x-30))').toString()); // (6+x)^(-1)*(9+x)
+    console.log(nerdamer('simplify((x^2+4*x-45)/(x^2+x-30))').toString()); // (6+x)^(-1)*(9+x) */
   }
   // latexSpan = document.getElementById('latex');
 
@@ -49,8 +55,6 @@ export class AppComponent implements AfterViewInit {
     console.log('Keydown: ', event.key);
     if (this.specialKey_1 == '' && event.key === 'Control') {
       this.specialKey_1 = event.key;
-    } else if (this.specialKey_2 == '' && event.key === 'AltGraph') {
-      this.specialKey_2 = event.key;
     }
 
     if (this.specialKey_1 == 'Control') {
@@ -63,12 +67,16 @@ export class AppComponent implements AfterViewInit {
           this.MQ.MathField(this.mathField).keystroke('Right');
           this.MQ.MathField(this.mathField).keystroke('Right');
           this.MQ.MathField(this.mathField).write('\\rightarrow');
-          break;
-        case '\\': // nth root (Calculator Toolbar)
-          this.MQ.MathField(this.mathField).write('\\sqrt[]{}');
+          this.MQ.MathField(this.mathField).write(this.myResultString);
+
           break;
         case 'i':
           this.MQ.MathField(this.mathField).cmd('\\intIndef');
+          break;
+        case '\\': // square root
+          //    this.MQ.MathField(this.mathField).write('\\sqrt{}');
+          this.MQ.MathField(this.mathField).cmd('\\sqrt');
+          // this.MQ.MathField(this.mathField).keystroke('Left');
           break;
       }
     } else {
@@ -95,9 +103,24 @@ export class AppComponent implements AfterViewInit {
           this.MQ.MathField(this.mathField).keystroke('Left');
           break;
 
-        case '\\': // square root
+        /*  case '\\': // square root
           this.MQ.MathField(this.mathField).write('\\sqrt{}');
+          //   this.MQ.MathField(this.mathField).cmd('\\sqrt');
+          // this.MQ.MathField(this.mathField).keystroke('Left');
+          break; */
+
+        case '#': // nth root (Calculator Toolbar)
+          /* this.MQ.MathField(this.mathField).write('\\sqrt[]{}');
+          this.MQ.MathField(this.mathField).keystroke('Left'); */
+
+          this.MQ.MathField(this.mathField).write('\\nthroot{}{}');
           this.MQ.MathField(this.mathField).keystroke('Left');
+          this.MQ.MathField(this.mathField).keystroke('Left');
+
+          //    \nthroot[1]{2}
+
+          //  this.MQ.MathField(this.mathField).cmd('\\nthSqrt');
+          //   this.buildWriteButton('\\sqrt[]{}', '4_sqrt_v2.png'),
           break;
 
         //----Calculus Toolbar---------------------------------------------------------------------------------------------------------------------
@@ -106,11 +129,17 @@ export class AppComponent implements AfterViewInit {
           this.MQ.MathField(this.mathField).cmd('\\deriOne');
           break;
 
+        /*     this.buildRegularButton('\\deriOne', '2_frac_v2_mathrm.png'),
+    this.buildRegularButton('\\deriNth', '12_deriNth_v1.png'), */
+
         case '&': // indefinite integral (Calculus Toolbar)
-          this.MQ.MathField(this.mathField).write('\\intIndef');
+          this.MQ.MathField(this.mathField).cmd('\\intDef');
           break;
 
-        default:
+        case 'Backspace':
+          this.deleteOnlyResult();
+
+        /* default:
           if (
             event.key !== 'Shift' &&
             event.key !== 'AltGraph' &&
@@ -125,14 +154,16 @@ export class AppComponent implements AfterViewInit {
             event.key !== 'CapsLock'
           ) {
             this.myFunction(event.key);
-          }
+          } */
       }
     }
   }
 
-  myFunction(keyBoardInput: any) {
-    //  this.MQ.MathField(this.mathField).write(keyBoardInput);
-    //  this.MQ.MathField(this.mathField).focus();
+  deleteOnlyResult() {
+    console.log(this.mathFieldXXX.latex());
+    console.log(this.mathFieldXXX);
+
+    this.mathFieldXXX.indexOf('rightarrow');
   }
 
   @HostListener('document:keyup', ['$event'])
@@ -141,8 +172,6 @@ export class AppComponent implements AfterViewInit {
 
     if (event.key == 'Control') {
       this.specialKey_1 = '';
-    } else if (event.key == 'AltGraph') {
-      this.specialKey_2 = '';
     }
 
     this.myLatex = this.mathFieldXXX.latex();

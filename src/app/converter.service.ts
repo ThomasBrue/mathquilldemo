@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as nerdamer from 'nerdamer/all';
+import * as math from 'mathjs';
 
 @Injectable({
   providedIn: 'root',
@@ -151,12 +152,22 @@ export class ConverterService {
                 }
               }
             }
-            str =
+            /* str =
               str.substring(0, start) +
               nerdamer(`diff(${fieldInput_2},${fieldInput_1})`).text(
                 'fractions'
               ) +
+              str.substring(i + 1, str.length); */
+
+            str =
+              str.substring(0, start) +
+              math
+                .derivative(fieldInput_2, fieldInput_1, {
+                  simplify: true,
+                })
+                .toString() +
               str.substring(i + 1, str.length);
+
             str = str.replace('\\deriOne', ' ');
           }
           break;
@@ -246,7 +257,7 @@ export class ConverterService {
               }
             }
 
-            console.log('fieldInput_1: ', fieldInput_1);
+            /*             console.log('fieldInput_1: ', fieldInput_1);
             console.log('fieldInput_2: ', fieldInput_2);
 
             console.log('111: ', str.substring(0, start + 5));
@@ -256,7 +267,7 @@ export class ConverterService {
                 'fractions'
               )
             );
-            console.log('333: ', str.substring(i + 1, str.length));
+            console.log('333: ', str.substring(i + 1, str.length)); */
 
             str =
               str.substring(0, start) +
