@@ -163,7 +163,23 @@ export class AppComponent implements AfterViewInit {
     console.log(this.mathFieldXXX.latex());
     console.log(this.mathFieldXXX);
 
-    this.mathFieldXXX.indexOf('rightarrow');
+    // this.mathFieldXXX.indexOf('rightarrow');
+
+    console.log('innerHTML: ', this.mathField.innerHTML);
+    //   this.mathField.innerHTML = '';
+    console.log(
+      'getByClass: ',
+      document.getElementsByClassName('mq-root-block')[0].innerHTML
+    );
+
+    document.getElementsByClassName('mq-root-block')[0].innerHTML = '';
+
+    //  let field = document.getElementsByClassName('mq-root-block');
+
+    //
+
+    /*     let mathFieldSpan1 = document.getElementById('math-field');
+    mathFieldSpan1.innerHTML = ''; */
   }
 
   @HostListener('document:keyup', ['$event'])
