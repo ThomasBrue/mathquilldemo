@@ -172,7 +172,29 @@ export class AppComponent implements AfterViewInit {
       document.getElementsByClassName('mq-root-block')[0].innerHTML
     );
 
-    document.getElementsByClassName('mq-root-block')[0].innerHTML = '';
+    //  document.getElementsByClassName('mq-root-block')[0].innerHTML = '';
+
+    this.MQ.MathField(this.mathField).focus();
+    this.MQ.MathField(this.mathField).select();
+
+    // k+(3)/(2)\rightarrow2x+4^x+7+4
+
+    if (this.myLatex.includes('rightarrow')) {
+      console.log(
+        'AAA: ',
+        this.myLatex.substring(0, this.myLatex.indexOf('\\rightarrow'))
+      );
+    }
+
+    this.MQ.MathField(this.mathField).write(
+      this.myLatex.substring(0, this.myLatex.indexOf('\\rightarrow'))
+    );
+
+    //  this.MQ.MathField(this.mathField).write('\\nthroot{}{}');
+
+    /*  document
+      .getElementsByClassName('mq-root-block')[0]
+      .classList.add('mq-hasCursor'); */
 
     //  let field = document.getElementsByClassName('mq-root-block');
 
@@ -185,6 +207,7 @@ export class AppComponent implements AfterViewInit {
   @HostListener('document:keyup', ['$event'])
   handleKeyupEvent(event: KeyboardEvent) {
     console.log('Keyup: ', event.key);
+    console.log('myLatex: ', this.myLatex);
 
     if (event.key == 'Control') {
       this.specialKey_1 = '';
