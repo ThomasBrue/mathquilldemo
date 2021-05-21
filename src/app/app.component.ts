@@ -160,48 +160,35 @@ export class AppComponent implements AfterViewInit {
   }
 
   deleteOnlyResult() {
-    console.log(this.mathFieldXXX.latex());
+    /*     console.log(this.mathFieldXXX.latex());
     console.log(this.mathFieldXXX);
 
-    // this.mathFieldXXX.indexOf('rightarrow');
-
     console.log('innerHTML: ', this.mathField.innerHTML);
-    //   this.mathField.innerHTML = '';
     console.log(
       'getByClass: ',
       document.getElementsByClassName('mq-root-block')[0].innerHTML
-    );
+    ); */
 
-    //  document.getElementsByClassName('mq-root-block')[0].innerHTML = '';
-
-    this.MQ.MathField(this.mathField).focus();
-    this.MQ.MathField(this.mathField).select();
+    /*     this.MQ.MathField(this.mathField).focus();
+    this.MQ.MathField(this.mathField).select(); */
 
     // k+(3)/(2)\rightarrow2x+4^x+7+4
 
+    /* this.MQ.MathField(this.mathField).keystroke('Backspace'); */
+
     if (this.myLatex.includes('rightarrow')) {
-      console.log(
-        'AAA: ',
-        this.myLatex.substring(0, this.myLatex.indexOf('\\rightarrow'))
+      let beforeArrow = this.myLatex.substring(
+        0,
+        this.myLatex.indexOf('\\rightarrow')
       );
+      for (let i = 0; i < 60; i++) {
+        this.MQ.MathField(this.mathField).keystroke('Right');
+      }
+      for (let i = 0; i < 60; i++) {
+        this.MQ.MathField(this.mathField).keystroke('Backspace');
+      }
+      this.MQ.MathField(this.mathField).write(beforeArrow);
     }
-
-    this.MQ.MathField(this.mathField).write(
-      this.myLatex.substring(0, this.myLatex.indexOf('\\rightarrow'))
-    );
-
-    //  this.MQ.MathField(this.mathField).write('\\nthroot{}{}');
-
-    /*  document
-      .getElementsByClassName('mq-root-block')[0]
-      .classList.add('mq-hasCursor'); */
-
-    //  let field = document.getElementsByClassName('mq-root-block');
-
-    //
-
-    /*     let mathFieldSpan1 = document.getElementById('math-field');
-    mathFieldSpan1.innerHTML = ''; */
   }
 
   @HostListener('document:keyup', ['$event'])
