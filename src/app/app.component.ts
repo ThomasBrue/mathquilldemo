@@ -6,6 +6,7 @@ import { ConverterService } from './converter.service';
 //import { ConverterService } from './converter.service';
 //import * as math from 'mathjs';
 //import * as _ from 'lodash';
+import { PostConverterService } from './post-converter.service';
 
 enum ButtonType {
   OPERATIONAL = 'OPERATIONAL',
@@ -30,7 +31,10 @@ export class AppComponent implements AfterViewInit {
 
   myResultString = '2x+4^x+7';
 
-  constructor(private converterService: ConverterService) {
+  constructor(
+    private converterService: ConverterService,
+    private postConverterService: PostConverterService
+  ) {
     /////////MATH_JS//////////////////////////////////////////////////////////////////////////////////////
     // math.evaluate('1.2 * (2 + 4.5)');
     ///////NERDAMER/////////////////////////////////////////////////////////////////////////////////////
@@ -60,14 +64,16 @@ export class AppComponent implements AfterViewInit {
     if (this.specialKey_1 == 'Control') {
       switch (event.key) {
         case ',':
-          this.MQ.MathField(this.mathField).keystroke('Right');
-          this.MQ.MathField(this.mathField).keystroke('Right');
-          this.MQ.MathField(this.mathField).keystroke('Right');
-          this.MQ.MathField(this.mathField).keystroke('Right');
-          this.MQ.MathField(this.mathField).keystroke('Right');
-          this.MQ.MathField(this.mathField).keystroke('Right');
+          for (let i = 0; i < 20; i++) {
+            this.MQ.MathField(this.mathField).keystroke('Right');
+          }
           this.MQ.MathField(this.mathField).write('\\rightarrow');
-          this.MQ.MathField(this.mathField).write(this.myResultString);
+          //     this.MQ.MathField(this.mathField).write(this.myResultString);
+
+          this.resultLatex = this.postConverterService.postConvertLatex(
+            this.resultLatex
+          );
+          this.MQ.MathField(this.mathField).write(this.resultLatex);
 
           break;
         case 'i':
@@ -86,6 +92,9 @@ export class AppComponent implements AfterViewInit {
           this.MQ.MathField(this.mathField).write('_{}');
           this.MQ.MathField(this.mathField).keystroke('Down');
           break;
+        /*  case '*':
+          this.MQ.MathField(this.mathField).write('\\cdot');
+          break; */
 
         case '"':
           this.MQ.MathField(this.mathField).write(' \\overline{}');
@@ -103,24 +112,10 @@ export class AppComponent implements AfterViewInit {
           this.MQ.MathField(this.mathField).keystroke('Left');
           break;
 
-        /*  case '\\': // square root
-          this.MQ.MathField(this.mathField).write('\\sqrt{}');
-          //   this.MQ.MathField(this.mathField).cmd('\\sqrt');
-          // this.MQ.MathField(this.mathField).keystroke('Left');
-          break; */
-
         case '#': // nth root (Calculator Toolbar)
-          /* this.MQ.MathField(this.mathField).write('\\sqrt[]{}');
-          this.MQ.MathField(this.mathField).keystroke('Left'); */
-
           this.MQ.MathField(this.mathField).write('\\nthroot{}{}');
           this.MQ.MathField(this.mathField).keystroke('Left');
           this.MQ.MathField(this.mathField).keystroke('Left');
-
-          //    \nthroot[1]{2}
-
-          //  this.MQ.MathField(this.mathField).cmd('\\nthSqrt');
-          //   this.buildWriteButton('\\sqrt[]{}', '4_sqrt_v2.png'),
           break;
 
         //----Calculus Toolbar---------------------------------------------------------------------------------------------------------------------
@@ -128,65 +123,30 @@ export class AppComponent implements AfterViewInit {
           //   this.MQ.MathField(this.mathField).write('\\frac{d}{dx}');
           this.MQ.MathField(this.mathField).cmd('\\deriOne');
           break;
-
-        /*     this.buildRegularButton('\\deriOne', '2_frac_v2_mathrm.png'),
-    this.buildRegularButton('\\deriNth', '12_deriNth_v1.png'), */
-
         case '&': // indefinite integral (Calculus Toolbar)
           this.MQ.MathField(this.mathField).cmd('\\intDef');
           break;
 
         case 'Backspace':
           this.deleteOnlyResult();
-
-        /* default:
-          if (
-            event.key !== 'Shift' &&
-            event.key !== 'AltGraph' &&
-            event.key !== 'Backspace' &&
-            event.key !== 'ArrowUp' &&
-            event.key !== 'ArrowDown' &&
-            event.key !== 'ArrowRight' &&
-            event.key !== 'ArrowLeft' &&
-            event.key !== 'Control' &&
-            event.key !== 'Shift' &&
-            event.key !== 'Alt' &&
-            event.key !== 'CapsLock'
-          ) {
-            this.myFunction(event.key);
-          } */
       }
     }
   }
 
   deleteOnlyResult() {
-    /*     console.log(this.mathFieldXXX.latex());
-    console.log(this.mathFieldXXX);
-
-    console.log('innerHTML: ', this.mathField.innerHTML);
-    console.log(
-      'getByClass: ',
-      document.getElementsByClassName('mq-root-block')[0].innerHTML
-    ); */
-
-    /*     this.MQ.MathField(this.mathField).focus();
-    this.MQ.MathField(this.mathField).select(); */
-
-    // k+(3)/(2)\rightarrow2x+4^x+7+4
-
-    /* this.MQ.MathField(this.mathField).keystroke('Backspace'); */
-
     if (this.myLatex.includes('rightarrow')) {
       let beforeArrow = this.myLatex.substring(
         0,
         this.myLatex.indexOf('\\rightarrow')
       );
+
       for (let i = 0; i < 60; i++) {
         this.MQ.MathField(this.mathField).keystroke('Right');
       }
       for (let i = 0; i < 60; i++) {
         this.MQ.MathField(this.mathField).keystroke('Backspace');
       }
+
       this.MQ.MathField(this.mathField).write(beforeArrow);
     }
   }
