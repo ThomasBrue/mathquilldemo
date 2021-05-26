@@ -32,8 +32,8 @@ export class ConverterService {
   }
 
   private simplifyLatex(latexInput: string): any {
-    return nerdamer(`simplify(${latexInput})`).toString();
-    // return math.simplify(math.parse(latexInput)).toString();
+    //  return nerdamer(`simplify(${latexInput})`).toString();
+    return math.simplify(math.parse(latexInput)).toString();
   }
 
   private cleanLatex(latexInput: string): string {
