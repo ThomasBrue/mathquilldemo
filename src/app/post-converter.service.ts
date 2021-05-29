@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import * as math from 'mathjs';
 
 @Injectable({
   providedIn: 'root',
@@ -7,20 +8,13 @@ export class PostConverterService {
   constructor() {}
 
   public postConvertLatex(latexInput: string): string {
-    console.log('IN: ', latexInput);
-    latexInput = latexInput.replace(/\*/g, ' \\cdot ');
+    console.log('IN-postConv: ', latexInput);
 
-    latexInput = this.toThePowerConverter(latexInput);
+    latexInput = math.simplify(math.parse(latexInput)).toTex();
 
-    latexInput = this.convertFractionToLatexFraction(latexInput);
-
-    /*     const inputLength: number = latexInput.length;
-    let j: number;
-
-    for (let i = 0, j = 0; i < inputLength; i++, j++) {
-      latexInput = [latexInput.slice(0, j), '^', latexInput.slice(j)].join('');
-      j++;
-    } */
+    //  latexInput = latexInput.replace(/\*/g, ' \\cdot ');
+    //  latexInput = this.toThePowerConverter(latexInput);
+    //  latexInput = this.convertFractionToLatexFraction(latexInput);
 
     console.log('OUT: ', latexInput);
 
@@ -37,6 +31,8 @@ export class PostConverterService {
       str = str.replace(' / ', ' }{ ');
       str = '\\frac{' + str + '}';
     }
+
+    //  s\cdot\frac{x\cdot c}{y}\cdot t   \rightarrow   \frac{x\cdot s}{y\cdot c\cdot t}
 
     // + + * /
     //    / --> anchor point

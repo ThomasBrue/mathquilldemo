@@ -7,6 +7,8 @@ import { ConverterService } from './converter.service';
 //import * as math from 'mathjs';
 //import * as _ from 'lodash';
 import { PostConverterService } from './post-converter.service';
+import * as math from 'mathjs';
+import * as nerdamer from 'nerdamer/all';
 
 enum ButtonType {
   OPERATIONAL = 'OPERATIONAL',
@@ -48,6 +50,25 @@ export class AppComponent implements AfterViewInit {
     console.log(nerdamer('defint(e^(cos(x)), 1, 2)').text('decimals', 7)); // 1.112780
     //--simplify----simplify()------------------------------------------------------------------------------------------------
     console.log(nerdamer('simplify((x^2+4*x-45)/(x^2+x-30))').toString()); // (6+x)^(-1)*(9+x) */
+
+    /*     console.log('WRONG-STUFF-IN:  s*(w* u)/(t)* d');
+    console.log(
+      'WRONG-STUFF-OUT: ',
+      math.simplify(math.parse('s*(w*u)/(t)*d')).toString()
+    ); */
+
+    //  console.log('cos(x): ', math.simplify(math.parse('cos(x)')).toString());
+
+    const myVar = math.derivative('sin(x)', 'x', { simplify: true });
+
+    console.log('myVar: ', myVar);
+
+    console.log('cos(x): ', math.simplify(myVar).toString());
+
+    /*     math
+    .derivative(fieldInput_2, fieldInput_1, {
+      simplify: true,
+    }) */
   }
   // latexSpan = document.getElementById('latex');
 
@@ -233,6 +254,7 @@ export class AppComponent implements AfterViewInit {
     this.buildWriteButton('\\deriOne{x}{x^2+\\deriOne{x}{x^3}}', 'AAAA'),
 
     this.buildWriteButton('\\intIndef{x^2+\\intIndef{x^3}{x}}{x}', 'BBBB'),
+    this.buildWriteButton('s\\cdot \\frac{w\\cdot u}{t}\\cdot d', 'CCCC'),
   ];
 
   latexToMath(str: string) {

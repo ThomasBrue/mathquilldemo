@@ -19,7 +19,9 @@ export class ConverterService {
       latexInput = this.derivativeConverter(latexInput);
       latexInput = this.integralConverter(latexInput);
 
+      console.log('IN-simplifyLatex: ', latexInput);
       latexInput = this.simplifyLatex(latexInput);
+      console.log('OUT-simplifyLatex: ', latexInput);
     } else {
       latexInput = '';
     }
@@ -32,8 +34,16 @@ export class ConverterService {
   }
 
   private simplifyLatex(latexInput: string): any {
+    //  console.log(math.simplify('0.4 * x', {}, { exactFractions: true }));
+
     //  return nerdamer(`simplify(${latexInput})`).toString();
+    console.log('TEST-toTex: ', math.simplify(math.parse(latexInput)).toTex());
+
     return math.simplify(math.parse(latexInput)).toString();
+
+    /*     return math
+      .simplify(math.parse(nerdamer(`simplify(${latexInput})`).toString()))
+      .toString(); */
   }
 
   private cleanLatex(latexInput: string): string {
@@ -46,6 +56,17 @@ export class ConverterService {
     latexInput = latexInput.replace(/{/g, '(');
     latexInput = latexInput.replace(/}/g, ')');
     latexInput = latexInput.replace(/\\cdot/g, '*');
+
+    latexInput = latexInput.replace(/\\left/g, ' ');
+    latexInput = latexInput.replace(/\\right/g, ' ');
+
+    latexInput = latexInput.replace(/\\cos/g, 'cos');
+    latexInput = latexInput.replace(/\\sin/g, 'sin');
+    latexInput = latexInput.replace(/\\tan/g, 'tan');
+
+    //   \left(
+    //    \right)
+
     return latexInput;
   }
 
@@ -86,6 +107,8 @@ export class ConverterService {
   }
 
   private derivativeConverter(str: string): string {
+    console.log('deri-IN: ', str);
+
     while (str.indexOf('\\deriOne') >= 0) {
       let brackedCount = 0;
       let start: number = str.indexOf('\\deriOne') + 8;
@@ -175,12 +198,14 @@ export class ConverterService {
         }
       }
     }
+
+    console.log('deri-OUT: ', str);
     return str;
   }
   //-----------------------------------------------------------------------------------------------
 
   private integralConverter(str: string): string {
-    console.log('IN: ', str);
+    // console.log('IN.integralConverter: ', str);
 
     while (str.indexOf('\\intIndef') >= 0) {
       let brackedCount = 0;
