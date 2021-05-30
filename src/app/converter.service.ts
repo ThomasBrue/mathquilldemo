@@ -9,6 +9,31 @@ export class ConverterService {
   constructor() {}
 
   public convertLatex(latexInput: string): string {
+    console.log('convertLatex-IN: ', latexInput);
+    //  console.log('old-convertLatex-IN: ', oldLatex);
+
+    console.log(
+      'LEFT-side: ',
+      latexInput.substr(0, latexInput.indexOf('\\rightarrow'))
+    );
+
+    console.log(
+      'RIGHT-side: ',
+      latexInput.substr(latexInput.indexOf('\\rightarrow'), latexInput.length)
+    );
+
+    /*     if (
+      latexInput.indexOf('\\rightarrow') >= 0 &&
+      latexInput.indexOf('\\rightarrow') >= 0
+    ) {
+      if (
+        latexInput.substr(0, latexInput.indexOf('\\rightarrow')).length !==
+        latexInput.substr(0, oldLatex.indexOf('\\rightarrow')).length
+      ) {
+        console.log('Aaaaahhh left has changed!');
+      }
+    } */
+
     latexInput = this.convertFraction(latexInput);
 
     latexInput = this.cleanLatex(latexInput);
@@ -26,6 +51,7 @@ export class ConverterService {
       latexInput = '';
     }
 
+    console.log('convertLatex-OUT: ', latexInput);
     return latexInput;
   }
 
@@ -63,6 +89,9 @@ export class ConverterService {
     latexInput = latexInput.replace(/\\cos/g, 'cos');
     latexInput = latexInput.replace(/\\sin/g, 'sin');
     latexInput = latexInput.replace(/\\tan/g, 'tan');
+
+    latexInput = latexInput.replace(/\\log/g, 'log');
+    latexInput = latexInput.replace(/\\ln/g, 'ln');
 
     //   \left(
     //    \right)

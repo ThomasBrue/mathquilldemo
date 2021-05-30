@@ -28,6 +28,7 @@ export class AppComponent implements AfterViewInit {
   latexToConvert = '';
 
   myLatex = '';
+  oldLatex = '';
   mathFieldXXX;
   resultLatex = '';
 
@@ -59,11 +60,15 @@ export class AppComponent implements AfterViewInit {
 
     //  console.log('cos(x): ', math.simplify(math.parse('cos(x)')).toString());
 
-    const myVar = math.derivative('sin(x)', 'x', { simplify: true });
+    console.log(
+      'SOLVER-DEMO-0: ',
+      nerdamer('x+2y=y-7x').solveFor('x').toString()
+    );
 
-    console.log('myVar: ', myVar);
-
-    console.log('cos(x): ', math.simplify(myVar).toString());
+    console.log(
+      'SOLVER-DEMO-1: ',
+      nerdamer('x^2+2=y-7*a').solveFor('x').toString()
+    );
 
     /*     math
     .derivative(fieldInput_2, fieldInput_1, {
@@ -78,6 +83,23 @@ export class AppComponent implements AfterViewInit {
   @HostListener('document:keydown', ['$event'])
   handleKeydownEvent(event: KeyboardEvent) {
     console.log('Keydown: ', event.key);
+
+    console.log(
+      'innerHTML: ',
+      document.getElementsByClassName('mq-root-block')[0].innerHTML
+    );
+
+    console.log(
+      'firstChild: ',
+      document.getElementsByClassName('mq-root-block')[0].lastChild
+    );
+
+    //  document.getElementsByClassName('mq-root-block')[0].nextElementSibling
+
+    // document.getElementById("item1").nextElementSibling
+
+    //  this.MQ.MathField(document.getElementsByClassName("mathquill-editable")).latex("");
+
     if (this.specialKey_1 == '' && event.key === 'Control') {
       this.specialKey_1 = event.key;
     }
@@ -109,10 +131,10 @@ export class AppComponent implements AfterViewInit {
     } else {
       switch (event.key) {
         //----Keystroke Commands-----------------------------------------------------------------------------------------------------------------
-        case '_':
+        /*         case '_':
           this.MQ.MathField(this.mathField).write('_{}');
           this.MQ.MathField(this.mathField).keystroke('Down');
-          break;
+          break; */
         /*  case '*':
           this.MQ.MathField(this.mathField).write('\\cdot');
           break; */
@@ -174,8 +196,8 @@ export class AppComponent implements AfterViewInit {
 
   @HostListener('document:keyup', ['$event'])
   handleKeyupEvent(event: KeyboardEvent) {
-    console.log('Keyup: ', event.key);
-    console.log('myLatex: ', this.myLatex);
+    /*     console.log('Keyup: ', event.key);
+    console.log('myLatex: ', this.myLatex); */
 
     if (event.key == 'Control') {
       this.specialKey_1 = '';
@@ -183,7 +205,78 @@ export class AppComponent implements AfterViewInit {
 
     this.myLatex = this.mathFieldXXX.latex();
 
+    //--------------------------------------------------------------------------------------------
+    console.log(
+      'LEFT-side: ',
+      this.myLatex.substr(0, this.myLatex.indexOf('\\rightarrow'))
+    );
+
+    console.log(
+      'RIGHT-side: ',
+      this.myLatex.substr(
+        this.myLatex.indexOf('\\rightarrow'),
+        this.myLatex.length
+      )
+    );
+
+    if (
+      this.myLatex.indexOf('\\rightarrow') >= 0 &&
+      this.oldLatex.indexOf('\\rightarrow') >= 0
+    ) {
+      if (
+        this.myLatex.substr(0, this.myLatex.indexOf('\\rightarrow')).length !==
+        this.myLatex.substr(0, this.oldLatex.indexOf('\\rightarrow')).length
+      ) {
+        console.log(
+          'new: ',
+          this.myLatex.substr(0, this.myLatex.indexOf('\\rightarrow'))
+        );
+        console.log(
+          'old: ',
+          this.myLatex.substr(0, this.oldLatex.indexOf('\\rightarrow'))
+        );
+
+        for (
+          let i = 0;
+          i <
+          this.myLatex.substr(0, this.oldLatex.indexOf('\\rightarrow')).length;
+          i++
+        ) {
+          console.log(
+            'hello-1: ',
+            this.myLatex
+              .substr(0, this.myLatex.indexOf('\\rightarrow'))
+              .charAt(i)
+          );
+          console.log(
+            'hello-2: ',
+            this.myLatex
+              .substr(0, this.oldLatex.indexOf('\\rightarrow'))
+              .charAt(i)
+          );
+
+          if (
+            this.myLatex
+              .substr(0, this.myLatex.indexOf('\\rightarrow'))
+              .charAt(i) !==
+            this.myLatex
+              .substr(0, this.oldLatex.indexOf('\\rightarrow'))
+              .charAt(i)
+          ) {
+            console.log('finl-left: ', this.myLatex.substr(0, i));
+          }
+        }
+
+        console.log('Aaaaahhh left has changed!');
+        this.deleteOnlyResult();
+        console.log('AFTER: ', this.myLatex);
+      }
+    }
+    //-------------------------------------------------------------------------------------------
+
     this.resultLatex = this.converterService.convertLatex(this.myLatex);
+
+    this.oldLatex = this.myLatex;
   }
 
   MQ = null;
