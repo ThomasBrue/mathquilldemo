@@ -205,6 +205,9 @@ export class AppComponent implements AfterViewInit {
 
     this.myLatex = this.mathFieldXXX.latex();
 
+    /*     console.log('newLatex: ', this.myLatex);
+    console.log('oldLatex: ', this.oldLatex); */
+
     //--------------------------------------------------------------------------------------------
     console.log(
       'LEFT-side: ',
@@ -227,7 +230,7 @@ export class AppComponent implements AfterViewInit {
         this.myLatex.substr(0, this.myLatex.indexOf('\\rightarrow')).length !==
         this.myLatex.substr(0, this.oldLatex.indexOf('\\rightarrow')).length
       ) {
-        console.log(
+        /*         console.log(
           'new: ',
           this.myLatex.substr(0, this.myLatex.indexOf('\\rightarrow'))
         );
@@ -235,40 +238,79 @@ export class AppComponent implements AfterViewInit {
           'old: ',
           this.myLatex.substr(0, this.oldLatex.indexOf('\\rightarrow'))
         );
+ */
+        console.log('newLatex: ', this.myLatex);
+        console.log('oldLatex: ', this.oldLatex);
 
         for (
           let i = 0;
           i <
-          this.myLatex.substr(0, this.oldLatex.indexOf('\\rightarrow')).length;
+          this.myLatex.substr(0, this.myLatex.indexOf('\\rightarrow')).length;
           i++
         ) {
-          console.log(
-            'hello-1: ',
-            this.myLatex
-              .substr(0, this.myLatex.indexOf('\\rightarrow'))
-              .charAt(i)
-          );
-          console.log(
-            'hello-2: ',
-            this.myLatex
-              .substr(0, this.oldLatex.indexOf('\\rightarrow'))
-              .charAt(i)
-          );
-
           if (
             this.myLatex
               .substr(0, this.myLatex.indexOf('\\rightarrow'))
               .charAt(i) !==
-            this.myLatex
+            this.oldLatex
               .substr(0, this.oldLatex.indexOf('\\rightarrow'))
               .charAt(i)
           ) {
-            console.log('finl-left: ', this.myLatex.substr(0, i));
+            console.log(
+              'indexOfDifference: ',
+              this.myLatex
+                .substr(0, this.myLatex.indexOf('\\rightarrow'))
+                .charAt(i),
+              ' numberIndex: ',
+              i
+            );
+            console.log('workingWith-LEFT: ', this.myLatex.substr(0, i));
+
+            const leftSide = this.myLatex.substr(0, i + 1);
+
+            console.log(
+              'workingWith-RIGHT: ',
+              this.myLatex.substr(i, this.myLatex.indexOf('\\rightarrow'))
+            );
+
+            const rightSide = this.myLatex.substr(
+              i + 1,
+              this.myLatex.indexOf('\\rightarrow') - 2
+            );
+
+            console.log(
+              'workingWith: ',
+              this.myLatex.substr(0, this.myLatex.indexOf('\\rightarrow'))
+            );
+
+            //-----------------------------------------------------------------------------------
+
+            console.log('XXX-left: ', leftSide);
+            console.log('XXX-right: ', rightSide);
+
+            /*             for (let i = 0; i < 60; i++) {
+              this.MQ.MathField(this.mathField).keystroke('Right');
+            }
+            for (let i = 0; i < 60; i++) {
+              this.MQ.MathField(this.mathField).keystroke('Backspace');
+            }
+
+            this.MQ.MathField(this.mathField).write(rightSide);
+
+            for (let i = 0; i < 60; i++) {
+              this.MQ.MathField(this.mathField).keystroke('Left');
+            }
+
+            this.MQ.MathField(this.mathField).write(leftSide); */
+            //----------------------------------------------------------------
+
+            break;
+            //  console.log('final-left: ', this.myLatex.substr(0, i));
           }
         }
 
         console.log('Aaaaahhh left has changed!');
-        this.deleteOnlyResult();
+        //    this.deleteOnlyResult();
         console.log('AFTER: ', this.myLatex);
       }
     }
