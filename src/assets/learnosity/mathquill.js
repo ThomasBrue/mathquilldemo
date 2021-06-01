@@ -612,6 +612,9 @@ JS environment could actually contain many instances. */
 
 //A fake cursor in the fake textbox that the math is rendered in.
 var Cursor = P(Point, function(_) {
+
+
+
     _.init = function(initParent, options) {
       this.parent = initParent;
       this.options = options;
@@ -624,6 +627,8 @@ var Cursor = P(Point, function(_) {
     };
   
     _.show = function() {
+
+      console.log("__show: ")
       this.jQ = this._jQ.removeClass('mq-blink');
       if ('intervalId' in this) //already was shown, just restart interval
         clearInterval(this.intervalId);
@@ -651,6 +656,14 @@ var Cursor = P(Point, function(_) {
     };
   
     _.withDirInsertAt = function(dir, parent, withDir, oppDir) {
+      console.log("-------------------------------------------")
+      console.log("__withDirInsertAt:: " )
+      console.log(" dir: " , dir)
+      console.log("parent: ", parent)
+      console.log("withDir: ", withDir)
+      console.log("oppDir: ", oppDir)
+      console.log("-------------------------------------------")
+
       var oldParent = this.parent;
       this.parent = parent;
       this[dir] = withDir;
@@ -661,6 +674,11 @@ var Cursor = P(Point, function(_) {
       if (oldParent !== parent && oldParent.blur) oldParent.blur(this);
     };
     _.insDirOf = function(dir, el) {
+      console.log("-------------------------------------------")
+      console.log("__insDirOf")
+      console.log("dir: ", dir)
+      console.log("el: ", el)
+      console.log("-------------------------------------------")
       prayDirection(dir);
       this.jQ.insDirOf(dir, el.jQ);
       this.withDirInsertAt(dir, el.parent, el[dir], el);
@@ -671,6 +689,7 @@ var Cursor = P(Point, function(_) {
     _.insRightOf = function(el) { return this.insDirOf(R, el); };
   
     _.insAtDirEnd = function(dir, el) {
+      console.log("__insAtDirEnd")
       prayDirection(dir);
       this.jQ.insAtDirEnd(dir, el.jQ);
       this.withDirInsertAt(dir, el, 0, el.ends[dir]);
