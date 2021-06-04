@@ -34,10 +34,93 @@ export class AppComponent implements AfterViewInit {
 
   myResultString = '2x+4^x+7';
 
+  clickOnMathField() {
+    //  $("#message").mathquill('latex', '').mousedown().mouseup();
+
+    //  this.MQ.MathField(this.mathField).focus();
+
+    let element: HTMLElement = document.getElementsByClassName(
+      'mq-root-block'
+    )[0] as HTMLElement;
+
+    console.log('HTML_element: ', element);
+    element.click();
+    element.dispatchEvent(new Event('click'));
+
+    let mySpecialElement = document.querySelectorAll(
+      '[mathquill-command-id="12"]'
+    )[0] as HTMLElement;
+    console.log(mySpecialElement.click());
+
+    //-------------------------------------------------------------------------
+
+    var evtMousedown = document.createEvent('MouseEvents');
+    evtMousedown.initMouseEvent(
+      'mousedown',
+      true,
+      false,
+      window,
+      0,
+      0,
+      0,
+      0,
+      0,
+      false,
+      false,
+      false,
+      false,
+      0,
+      null
+    );
+    document
+      .querySelectorAll('[mathquill-command-id="12"]')[0]
+      .dispatchEvent(evtMousedown);
+
+    //-------------------------------------------
+    var evtMouseup = document.createEvent('MouseEvents');
+    evtMouseup.initMouseEvent(
+      'mouseup',
+      true,
+      false,
+      window,
+      0,
+      0,
+      0,
+      0,
+      0,
+      false,
+      false,
+      false,
+      false,
+      0,
+      null
+    );
+    document
+      .querySelectorAll('[mathquill-command-id="12"]')[0]
+      .dispatchEvent(evtMouseup);
+  }
+
   constructor(
     private converterService: ConverterService,
     private postConverterService: PostConverterService
   ) {
+    document.addEventListener(
+      'click',
+      function (e) {
+        console.log('TARGET: ', e.target);
+      },
+      false
+    );
+
+    // let element: HTMLElement = document.getElementsByClassName(
+    //   'mq-root-block'
+    // )[0] as HTMLElement;
+    //   element.click();
+
+    /*     document.getElementsByClassName('mq-root-block')[0].onclick = function(){
+    
+    } */
+
     /////////MATH_JS//////////////////////////////////////////////////////////////////////////////////////
     // math.evaluate('1.2 * (2 + 4.5)');
     ///////NERDAMER/////////////////////////////////////////////////////////////////////////////////////
@@ -421,6 +504,16 @@ export class AppComponent implements AfterViewInit {
 
       this.myLatex = this.mathFieldXXX.latex();
     }, 5000); */
+
+    this.MQ.MathField(this.mathField).focus();
+
+    let element: HTMLElement = document.getElementsByClassName(
+      'mq-root-block'
+    )[0] as HTMLElement;
+
+    console.log('HTML_element: ', element);
+    element.click();
+    element.dispatchEvent(new Event('click'));
   }
 
   onClickMathButton(e: any, button) {
