@@ -112,6 +112,14 @@ export class AppComponent implements AfterViewInit {
       false
     );
 
+    document.addEventListener(
+      'keydown',
+      function (e) {
+        console.log('TARGET-222: ', e.target);
+      },
+      false
+    );
+
     // let element: HTMLElement = document.getElementsByClassName(
     //   'mq-root-block'
     // )[0] as HTMLElement;
