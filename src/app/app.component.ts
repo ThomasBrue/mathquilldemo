@@ -107,24 +107,24 @@ export class AppComponent implements AfterViewInit {
     document.addEventListener(
       'click',
       function (e) {
-        console.log('TARGET: ', e.target);
+        console.log('TARGET-click: ', e.target);
       },
       false
     );
 
     document.addEventListener(
-      'keydown',
+      'keyup',
       function (e) {
-        console.log('TARGET-222: ', e.target);
+        console.log('TARGET-keyup: ', e.target);
       },
       false
     );
 
-    // let element: HTMLElement = document.getElementsByClassName(
-    //   'mq-root-block'
-    // )[0] as HTMLElement;
-    //   element.click();
-
+    /*     let element: HTMLElement = document.getElementsByClassName(
+      'mq-root-block'
+    )[0] as HTMLElement;
+      element.click();
+ */
     /*     document.getElementsByClassName('mq-root-block')[0].onclick = function(){
     
     } */
@@ -175,14 +175,21 @@ export class AppComponent implements AfterViewInit {
   handleKeydownEvent(event: KeyboardEvent) {
     console.log('Keydown: ', event.key);
 
+    console.log('All: ', document.getElementsByClassName('mq-root-block')[0]);
+
     console.log(
       'innerHTML: ',
       document.getElementsByClassName('mq-root-block')[0].innerHTML
     );
 
     console.log(
-      'firstChild: ',
+      'lastChild: ',
       document.getElementsByClassName('mq-root-block')[0].lastChild
+    );
+
+    console.log(
+      'firstChild: ',
+      document.getElementsByClassName('mq-root-block')[0].firstChild
     );
 
     //  document.getElementsByClassName('mq-root-block')[0].nextElementSibling
@@ -289,6 +296,20 @@ export class AppComponent implements AfterViewInit {
   handleKeyupEvent(event: KeyboardEvent) {
     /*     console.log('Keyup: ', event.key);
     console.log('myLatex: ', this.myLatex); */
+
+    //----------------------------------------------------------------------------------
+    let currentElement: HTMLElement = document.getElementsByClassName(
+      'mq-cursor'
+    )[0] as HTMLElement;
+
+    //  document.getElementById("item1").nextSibling.innerHTML;
+
+    console.log('CurrentElement__nextSibling: ', currentElement.nextSibling);
+    console.log(
+      'CurrentElement__previousSibling: ',
+      currentElement.previousSibling
+    );
+    //-------------------------------------------------------------------------
 
     if (event.key == 'Control') {
       this.specialKey_1 = '';
