@@ -1,4 +1,10 @@
-import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  AfterViewInit,
+  ViewChild,
+  ElementRef,
+  DoCheck,
+} from '@angular/core';
 import { env, mainModule } from 'process';
 import { HostListener } from '@angular/core';
 // import * as nerdamer from 'nerdamer/all';
@@ -20,7 +26,7 @@ enum ButtonType {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent implements AfterViewInit, DoCheck {
   title = 'mathquill';
   //  normalKey: any;
   specialKey_1: String = '';
@@ -33,6 +39,47 @@ export class AppComponent implements AfterViewInit {
   resultLatex = '';
 
   myResultString = '2x+4^x+7';
+
+  previousSibling: Element;
+  nextSibling: Element;
+  curserInsertionPoint: any;
+
+  afterViewInitOver = false;
+  deleteOnlySolution = false;
+
+  ngDoCheck() {
+    console.log(this.deleteOnlySolution);
+    if (this.afterViewInitOver && this.deleteOnlySolution) {
+      const innerHtmlString = document.getElementsByClassName(
+        'mq-root-block'
+      )[0].innerHTML as string;
+      /* 
+console.log(
+  'mySubstring: ',
+  innerHtmlString.substring(
+    innerHtmlString.indexOf('&nbsp; → &nbsp;') + 15,
+    innerHtmlString.length
+  )
+);
+*/
+
+      if (
+        this.myLatex.includes('rightarrow') &&
+        innerHtmlString.includes('&nbsp; → &nbsp;')
+      ) {
+        /*    for (let i = 0; i < 60; i++) {
+          this.MQ.MathField(this.mathField).keystroke('Right');
+        } */
+        //    console.log('doCheck: ', this.myLatex);
+
+        //   this.MQ.MathField(this.mathField).keystroke('Right');
+        this.MQ.MathField(this.mathField).keystroke('Backspace');
+        //   this.deleteOnlySolution = false;
+      } else {
+        this.deleteOnlySolution = false;
+      }
+    }
+  }
 
   clickOnMathField() {
     //  $("#message").mathquill('latex', '').mousedown().mouseup();
@@ -47,12 +94,22 @@ export class AppComponent implements AfterViewInit {
     element.click();
     element.dispatchEvent(new Event('click'));
 
-    let mySpecialElement = document.querySelectorAll(
+    /*    let mySpecialElement = document.querySelectorAll(
       '[mathquill-command-id="12"]'
     )[0] as HTMLElement;
-    console.log(mySpecialElement.click());
+    console.log(mySpecialElement.click()); */
 
     //-------------------------------------------------------------------------
+
+    if (this.nextSibling) {
+      this.curserInsertionPoint = this.nextSibling.getAttribute(
+        'mathquill-command-id'
+      ) as string;
+    } else if (this.previousSibling) {
+      this.curserInsertionPoint = this.previousSibling.getAttribute(
+        'mathquill-command-id'
+      ) as string;
+    }
 
     var evtMousedown = document.createEvent('MouseEvents');
     evtMousedown.initMouseEvent(
@@ -73,7 +130,9 @@ export class AppComponent implements AfterViewInit {
       null
     );
     document
-      .querySelectorAll('[mathquill-command-id="12"]')[0]
+      .querySelectorAll(
+        `[mathquill-command-id="${this.curserInsertionPoint}"]`
+      )[0]
       .dispatchEvent(evtMousedown);
 
     //-------------------------------------------
@@ -96,8 +155,18 @@ export class AppComponent implements AfterViewInit {
       null
     );
     document
-      .querySelectorAll('[mathquill-command-id="12"]')[0]
+      .querySelectorAll(
+        `[mathquill-command-id="${this.curserInsertionPoint}"]`
+      )[0]
       .dispatchEvent(evtMouseup);
+
+    if (!this.nextSibling && this.previousSibling) {
+      this.MQ.MathField(this.mathField).keystroke('Right');
+    }
+
+    //--------------------------------------------------------------------
+    const refs = document.querySelectorAll(`mathquill-command-id]`);
+    console.log('REFS: ', refs);
   }
 
   constructor(
@@ -275,7 +344,52 @@ export class AppComponent implements AfterViewInit {
   }
 
   deleteOnlyResult() {
+    this.deleteOnlySolution = true;
+
     if (this.myLatex.includes('rightarrow')) {
+      for (let i = 0; i < 60; i++) {
+        this.MQ.MathField(this.mathField).keystroke('Right');
+      }
+    }
+
+    /*     for (let i = 0; i < 60; i++) {
+      this.MQ.MathField(this.mathField).keystroke('Right');
+    }
+
+    this.MQ.MathField(this.mathField).keystroke('Backspace');
+    console.log('DEL_1: ', this.myLatex);
+    setTimeout(() => {
+      this.MQ.MathField(this.mathField).keystroke('Backspace');
+      console.log('DEL_2: ', this.myLatex);
+
+      setTimeout(() => {
+        this.MQ.MathField(this.mathField).keystroke('Backspace');
+        console.log('DEL_3: ', this.myLatex);
+        this.MQ.MathField(this.mathField).keystroke('Backspace');
+        console.log('DEL_4: ', this.myLatex);
+        this.MQ.MathField(this.mathField).keystroke('Backspace');
+        console.log('DEL_5: ', this.myLatex);
+      }, 2000);
+    }, 2000); */
+    /*  if (this.myLatex.includes('rightarrow')) {
+      console.log(
+        'innerHTML: ',
+        document.getElementsByClassName('mq-root-block')[0].innerHTML
+      );
+
+      const innerHtmlString = document.getElementsByClassName(
+        'mq-root-block'
+      )[0].innerHTML as string;
+
+      console.log(
+        'mySubstring: ',
+        innerHtmlString.substring(
+          innerHtmlString.indexOf('&nbsp; → &nbsp;') + 15,
+          innerHtmlString.length
+        )
+      );
+    } */
+    /* if (this.myLatex.includes('rightarrow')) {
       let beforeArrow = this.myLatex.substring(
         0,
         this.myLatex.indexOf('\\rightarrow')
@@ -289,7 +403,7 @@ export class AppComponent implements AfterViewInit {
       }
 
       this.MQ.MathField(this.mathField).write(beforeArrow);
-    }
+    } */
   }
 
   @HostListener('document:keyup', ['$event'])
@@ -304,11 +418,37 @@ export class AppComponent implements AfterViewInit {
 
     //  document.getElementById("item1").nextSibling.innerHTML;
 
-    console.log('CurrentElement__nextSibling: ', currentElement.nextSibling);
     console.log(
       'CurrentElement__previousSibling: ',
       currentElement.previousSibling
     );
+
+    if (currentElement.previousSibling) {
+      this.previousSibling = currentElement.previousSibling as Element;
+
+      console.log(
+        'XXX: ',
+        this.previousSibling.getAttribute('mathquill-command-id')
+      );
+    } else {
+      this.previousSibling = null;
+    }
+
+    if (currentElement.nextSibling) {
+      this.nextSibling = currentElement.nextSibling as Element;
+
+      console.log(
+        'YYY: ',
+        this.nextSibling.getAttribute('mathquill-command-id')
+      );
+    } else {
+      this.nextSibling = null;
+    }
+
+    console.log('CurrentElement__nextSibling: ', currentElement.nextSibling);
+
+    console.log('CurrentElement: ', currentElement);
+
     //-------------------------------------------------------------------------
 
     if (event.key == 'Control') {
@@ -543,6 +683,8 @@ export class AppComponent implements AfterViewInit {
     console.log('HTML_element: ', element);
     element.click();
     element.dispatchEvent(new Event('click'));
+
+    this.afterViewInitOver = true;
   }
 
   onClickMathButton(e: any, button) {
