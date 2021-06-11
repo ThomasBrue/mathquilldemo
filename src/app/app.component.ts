@@ -42,41 +42,32 @@ export class AppComponent implements AfterViewInit, DoCheck {
 
   previousSibling: Element;
   nextSibling: Element;
+  parentElement: Element;
+
   curserInsertionPoint: any;
 
   afterViewInitOver = false;
   deleteOnlySolution = false;
 
   ngDoCheck() {
+    /* console.log('AAA_previousSibling: ', this.previousSibling);
+    console.log('AAA_nextSibling: ', this.nextSibling);
+    console.log('AAA_parentElement: ', this.parentElement); */
+
     console.log(this.deleteOnlySolution);
     if (this.afterViewInitOver && this.deleteOnlySolution) {
       const innerHtmlString = document.getElementsByClassName(
         'mq-root-block'
       )[0].innerHTML as string;
-      /* 
-console.log(
-  'mySubstring: ',
-  innerHtmlString.substring(
-    innerHtmlString.indexOf('&nbsp; → &nbsp;') + 15,
-    innerHtmlString.length
-  )
-);
-*/
-
       if (
         this.myLatex.includes('rightarrow') &&
         innerHtmlString.includes('&nbsp; → &nbsp;')
       ) {
-        /*    for (let i = 0; i < 60; i++) {
-          this.MQ.MathField(this.mathField).keystroke('Right');
-        } */
-        //    console.log('doCheck: ', this.myLatex);
-
-        //   this.MQ.MathField(this.mathField).keystroke('Right');
         this.MQ.MathField(this.mathField).keystroke('Backspace');
-        //   this.deleteOnlySolution = false;
       } else {
+        console.log('ELSE');
         this.deleteOnlySolution = false;
+        this.clickOnMathField();
       }
     }
   }
@@ -109,6 +100,10 @@ console.log(
       this.curserInsertionPoint = this.previousSibling.getAttribute(
         'mathquill-command-id'
       ) as string;
+    } else if (this.parentElement) {
+      this.curserInsertionPoint = this.parentElement.getAttribute(
+        'mathquill-block-id'
+      ) as string;
     }
 
     var evtMousedown = document.createEvent('MouseEvents');
@@ -129,11 +124,22 @@ console.log(
       0,
       null
     );
-    document
-      .querySelectorAll(
-        `[mathquill-command-id="${this.curserInsertionPoint}"]`
-      )[0]
-      .dispatchEvent(evtMousedown);
+
+    this.curserInsertionPoint = 3;
+
+    if (this.nextSibling || this.previousSibling) {
+      document
+        .querySelectorAll(
+          `[mathquill-command-id="${this.curserInsertionPoint}"]`
+        )[0]
+        .dispatchEvent(evtMousedown);
+    } else if (this.parentElement) {
+      document
+        .querySelectorAll(
+          `[mathquill-block-id="${this.curserInsertionPoint}"]`
+        )[0]
+        .dispatchEvent(evtMousedown);
+    }
 
     //-------------------------------------------
     var evtMouseup = document.createEvent('MouseEvents');
@@ -154,11 +160,20 @@ console.log(
       0,
       null
     );
-    document
-      .querySelectorAll(
-        `[mathquill-command-id="${this.curserInsertionPoint}"]`
-      )[0]
-      .dispatchEvent(evtMouseup);
+
+    if (this.nextSibling || this.previousSibling) {
+      document
+        .querySelectorAll(
+          `[mathquill-command-id="${this.curserInsertionPoint}"]`
+        )[0]
+        .dispatchEvent(evtMouseup);
+    } else if (this.parentElement) {
+      document
+        .querySelectorAll(
+          `[mathquill-block-id="${this.curserInsertionPoint}"]`
+        )[0]
+        .dispatchEvent(evtMouseup);
+    }
 
     if (!this.nextSibling && this.previousSibling) {
       this.MQ.MathField(this.mathField).keystroke('Right');
@@ -423,6 +438,12 @@ console.log(
       currentElement.previousSibling
     );
 
+    console.log(
+      'CurrentElement__parrentElement: ',
+      currentElement.parentElement
+    );
+
+    // if (!this.deleteOnlySolution) {
     if (currentElement.previousSibling) {
       this.previousSibling = currentElement.previousSibling as Element;
 
@@ -444,6 +465,18 @@ console.log(
     } else {
       this.nextSibling = null;
     }
+
+    if (currentElement.parentElement) {
+      this.parentElement = currentElement.parentElement as Element;
+
+      console.log(
+        'ZZZ: ',
+        this.parentElement.getAttribute('mathquill-block-id')
+      );
+    } else {
+      this.parentElement = null;
+    }
+    // }
 
     console.log('CurrentElement__nextSibling: ', currentElement.nextSibling);
 
