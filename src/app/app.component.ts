@@ -1,10 +1,4 @@
-import {
-  Component,
-  AfterViewInit,
-  ViewChild,
-  ElementRef,
-  DoCheck,
-} from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { env, mainModule } from 'process';
 import { HostListener } from '@angular/core';
 // import * as nerdamer from 'nerdamer/all';
@@ -26,7 +20,7 @@ enum ButtonType {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent implements AfterViewInit, DoCheck {
+export class AppComponent implements AfterViewInit {
   title = 'mathquill';
   //  normalKey: any;
   specialKey_1: String = '';
@@ -49,141 +43,6 @@ export class AppComponent implements AfterViewInit, DoCheck {
   afterViewInitOver = false;
   deleteOnlySolution = false;
 
-  ngDoCheck() {
-    /* console.log('AAA_previousSibling: ', this.previousSibling);
-    console.log('AAA_nextSibling: ', this.nextSibling);
-    console.log('AAA_parentElement: ', this.parentElement); */
-
-    console.log(this.deleteOnlySolution);
-    if (this.afterViewInitOver && this.deleteOnlySolution) {
-      const innerHtmlString = document.getElementsByClassName(
-        'mq-root-block'
-      )[0].innerHTML as string;
-      if (
-        this.myLatex.includes('rightarrow') &&
-        innerHtmlString.includes('&nbsp; → &nbsp;')
-      ) {
-        this.MQ.MathField(this.mathField).keystroke('Backspace');
-      } else {
-        console.log('ELSE');
-        this.deleteOnlySolution = false;
-        this.clickOnMathField();
-      }
-    }
-  }
-
-  clickOnMathField() {
-    //  $("#message").mathquill('latex', '').mousedown().mouseup();
-
-    //  this.MQ.MathField(this.mathField).focus();
-
-    let element: HTMLElement = document.getElementsByClassName(
-      'mq-root-block'
-    )[0] as HTMLElement;
-
-    console.log('HTML_element: ', element);
-    element.click();
-    element.dispatchEvent(new Event('click'));
-
-    /*    let mySpecialElement = document.querySelectorAll(
-      '[mathquill-command-id="12"]'
-    )[0] as HTMLElement;
-    console.log(mySpecialElement.click()); */
-
-    //-------------------------------------------------------------------------
-
-    if (this.nextSibling) {
-      this.curserInsertionPoint = this.nextSibling.getAttribute(
-        'mathquill-command-id'
-      ) as string;
-    } else if (this.previousSibling) {
-      this.curserInsertionPoint = this.previousSibling.getAttribute(
-        'mathquill-command-id'
-      ) as string;
-    } else if (this.parentElement) {
-      this.curserInsertionPoint = this.parentElement.getAttribute(
-        'mathquill-block-id'
-      ) as string;
-    }
-
-    var evtMousedown = document.createEvent('MouseEvents');
-    evtMousedown.initMouseEvent(
-      'mousedown',
-      true,
-      false,
-      window,
-      0,
-      0,
-      0,
-      0,
-      0,
-      false,
-      false,
-      false,
-      false,
-      0,
-      null
-    );
-
-    this.curserInsertionPoint = 3;
-
-    if (this.nextSibling || this.previousSibling) {
-      document
-        .querySelectorAll(
-          `[mathquill-command-id="${this.curserInsertionPoint}"]`
-        )[0]
-        .dispatchEvent(evtMousedown);
-    } else if (this.parentElement) {
-      document
-        .querySelectorAll(
-          `[mathquill-block-id="${this.curserInsertionPoint}"]`
-        )[0]
-        .dispatchEvent(evtMousedown);
-    }
-
-    //-------------------------------------------
-    var evtMouseup = document.createEvent('MouseEvents');
-    evtMouseup.initMouseEvent(
-      'mouseup',
-      true,
-      false,
-      window,
-      0,
-      0,
-      0,
-      0,
-      0,
-      false,
-      false,
-      false,
-      false,
-      0,
-      null
-    );
-
-    if (this.nextSibling || this.previousSibling) {
-      document
-        .querySelectorAll(
-          `[mathquill-command-id="${this.curserInsertionPoint}"]`
-        )[0]
-        .dispatchEvent(evtMouseup);
-    } else if (this.parentElement) {
-      document
-        .querySelectorAll(
-          `[mathquill-block-id="${this.curserInsertionPoint}"]`
-        )[0]
-        .dispatchEvent(evtMouseup);
-    }
-
-    if (!this.nextSibling && this.previousSibling) {
-      this.MQ.MathField(this.mathField).keystroke('Right');
-    }
-
-    //--------------------------------------------------------------------
-    const refs = document.querySelectorAll(`mathquill-command-id]`);
-    console.log('REFS: ', refs);
-  }
-
   constructor(
     private converterService: ConverterService,
     private postConverterService: PostConverterService
@@ -204,37 +63,6 @@ export class AppComponent implements AfterViewInit, DoCheck {
       false
     );
 
-    /*     let element: HTMLElement = document.getElementsByClassName(
-      'mq-root-block'
-    )[0] as HTMLElement;
-      element.click();
- */
-    /*     document.getElementsByClassName('mq-root-block')[0].onclick = function(){
-    
-    } */
-
-    /////////MATH_JS//////////////////////////////////////////////////////////////////////////////////////
-    // math.evaluate('1.2 * (2 + 4.5)');
-    ///////NERDAMER/////////////////////////////////////////////////////////////////////////////////////
-    /*     //--Evaluation----evaluate()------------------------------------------------------------------------------------
-    console.log(nerdamer('x^2', { x: '2' }).evaluate().text('fractions')); // 4
-    //--Differentiation----diff()------------------------------------------------------------------------------------
-    console.log(nerdamer('diff(x^2,x)').text('fractions')); // 2*x
-    //--integration-Indefinite----integrate()------------------------------------------------------------------------------------
-    console.log(nerdamer('integrate(cos(x),x)').text('fractions')); // sin(x)
-    //--integration-Definite----integrate()------------------------------------------------------------------------------------
-    console.log(nerdamer('defint(e^(cos(x)), 1, 2)').text('decimals', 7)); // 1.112780
-    //--simplify----simplify()------------------------------------------------------------------------------------------------
-    console.log(nerdamer('simplify((x^2+4*x-45)/(x^2+x-30))').toString()); // (6+x)^(-1)*(9+x) */
-
-    /*     console.log('WRONG-STUFF-IN:  s*(w* u)/(t)* d');
-    console.log(
-      'WRONG-STUFF-OUT: ',
-      math.simplify(math.parse('s*(w*u)/(t)*d')).toString()
-    ); */
-
-    //  console.log('cos(x): ', math.simplify(math.parse('cos(x)')).toString());
-
     console.log(
       'SOLVER-DEMO-0: ',
       nerdamer('x+2y=y-7x').solveFor('x').toString()
@@ -244,43 +72,11 @@ export class AppComponent implements AfterViewInit, DoCheck {
       'SOLVER-DEMO-1: ',
       nerdamer('x^2+2=y-7*a').solveFor('x').toString()
     );
-
-    /*     math
-    .derivative(fieldInput_2, fieldInput_1, {
-      simplify: true,
-    }) */
   }
-  // latexSpan = document.getElementById('latex');
-
-  // Link to Github Mathquill-Matrix:
-  // https://github.com/Learnosity/mathquill/blob/matrix/src/commands/math/commands.js
 
   @HostListener('document:keydown', ['$event'])
   handleKeydownEvent(event: KeyboardEvent) {
     console.log('Keydown: ', event.key);
-
-    console.log('All: ', document.getElementsByClassName('mq-root-block')[0]);
-
-    console.log(
-      'innerHTML: ',
-      document.getElementsByClassName('mq-root-block')[0].innerHTML
-    );
-
-    console.log(
-      'lastChild: ',
-      document.getElementsByClassName('mq-root-block')[0].lastChild
-    );
-
-    console.log(
-      'firstChild: ',
-      document.getElementsByClassName('mq-root-block')[0].firstChild
-    );
-
-    //  document.getElementsByClassName('mq-root-block')[0].nextElementSibling
-
-    // document.getElementById("item1").nextElementSibling
-
-    //  this.MQ.MathField(document.getElementsByClassName("mathquill-editable")).latex("");
 
     if (this.specialKey_1 == '' && event.key === 'Control') {
       this.specialKey_1 = event.key;
@@ -289,11 +85,10 @@ export class AppComponent implements AfterViewInit, DoCheck {
     if (this.specialKey_1 == 'Control') {
       switch (event.key) {
         case ',':
-          for (let i = 0; i < 20; i++) {
+          for (let i = 0; i < 50; i++) {
             this.MQ.MathField(this.mathField).keystroke('Right');
           }
           this.MQ.MathField(this.mathField).write('\\rightarrow');
-          //     this.MQ.MathField(this.mathField).write(this.myResultString);
 
           this.resultLatex = this.postConverterService.postConvertLatex(
             this.resultLatex
@@ -313,13 +108,72 @@ export class AppComponent implements AfterViewInit, DoCheck {
     } else {
       switch (event.key) {
         //----Keystroke Commands-----------------------------------------------------------------------------------------------------------------
-        /*         case '_':
-          this.MQ.MathField(this.mathField).write('_{}');
-          this.MQ.MathField(this.mathField).keystroke('Down');
-          break; */
-        /*  case '*':
-          this.MQ.MathField(this.mathField).write('\\cdot');
-          break; */
+        case '=':
+          for (let i = 0; i < 50; i++) {
+            this.MQ.MathField(this.mathField).keystroke('Right');
+          }
+
+          let result: any;
+          try {
+            result = math.parse(this.resultLatex).evaluate();
+          } catch (error) {
+            console.log('divArray: ', document.getElementsByTagName('div'));
+
+            console.log('LENGTH: ', error.toString().length);
+            let i = error.toString().length;
+
+            let errorVar: string;
+
+            for (; i > 0; i--) {
+              console.log(
+                'inLoop_333: ',
+                error.toString()[i],
+                i,
+                error.toString()
+              );
+              if (error.toString()[i] === ' ') {
+                errorVar = error
+                  .toString()
+                  .substring(i, error.toString().length);
+                break;
+              }
+            }
+
+            let varTags = document.getElementsByTagName('var');
+            let searchText = errorVar;
+            let found: any;
+
+            varTags[0].classList.add('addCSS');
+            for (let i = 0; i < varTags.length; i++) {
+              console.log(
+                'el: ',
+                varTags[i].innerHTML,
+                searchText,
+                varTags[i].innerHTML.trim() == searchText.trim()
+              );
+              if (varTags[i].innerHTML.trim() == searchText.trim()) {
+                found = varTags[i];
+                found.classList.add('addCSS');
+                found.style.color = 'red';
+                found.style['font-weight'] = 'bold';
+
+                setTimeout(() => {
+                  found.style.color = 'black';
+                  found.style['font-weight'] = 'normal';
+                }, 3000);
+                setTimeout(() => {
+                  this.MQ.MathField(this.mathField).keystroke('Backspace');
+                }, 100);
+              }
+            }
+          }
+
+          if (result) {
+            this.MQ.MathField(this.mathField).write('=');
+            this.MQ.MathField(this.mathField).write(result);
+          }
+
+          break;
 
         case '"':
           this.MQ.MathField(this.mathField).write(' \\overline{}');
@@ -362,126 +216,27 @@ export class AppComponent implements AfterViewInit, DoCheck {
     this.deleteOnlySolution = true;
 
     if (this.myLatex.includes('rightarrow')) {
-      for (let i = 0; i < 60; i++) {
-        this.MQ.MathField(this.mathField).keystroke('Right');
-      }
-    }
-
-    /*     for (let i = 0; i < 60; i++) {
-      this.MQ.MathField(this.mathField).keystroke('Right');
-    }
-
-    this.MQ.MathField(this.mathField).keystroke('Backspace');
-    console.log('DEL_1: ', this.myLatex);
-    setTimeout(() => {
-      this.MQ.MathField(this.mathField).keystroke('Backspace');
-      console.log('DEL_2: ', this.myLatex);
-
-      setTimeout(() => {
-        this.MQ.MathField(this.mathField).keystroke('Backspace');
-        console.log('DEL_3: ', this.myLatex);
-        this.MQ.MathField(this.mathField).keystroke('Backspace');
-        console.log('DEL_4: ', this.myLatex);
-        this.MQ.MathField(this.mathField).keystroke('Backspace');
-        console.log('DEL_5: ', this.myLatex);
-      }, 2000);
-    }, 2000); */
-    /*  if (this.myLatex.includes('rightarrow')) {
-      console.log(
-        'innerHTML: ',
-        document.getElementsByClassName('mq-root-block')[0].innerHTML
-      );
-
-      const innerHtmlString = document.getElementsByClassName(
-        'mq-root-block'
-      )[0].innerHTML as string;
-
-      console.log(
-        'mySubstring: ',
-        innerHtmlString.substring(
-          innerHtmlString.indexOf('&nbsp; → &nbsp;') + 15,
-          innerHtmlString.length
-        )
-      );
-    } */
-    /* if (this.myLatex.includes('rightarrow')) {
       let beforeArrow = this.myLatex.substring(
         0,
         this.myLatex.indexOf('\\rightarrow')
       );
-
-      for (let i = 0; i < 60; i++) {
-        this.MQ.MathField(this.mathField).keystroke('Right');
-      }
+      this.MQ.MathField(this.mathField).keystroke('End');
       for (let i = 0; i < 60; i++) {
         this.MQ.MathField(this.mathField).keystroke('Backspace');
       }
-
       this.MQ.MathField(this.mathField).write(beforeArrow);
-    } */
+    } else if (this.myLatex.includes('=')) {
+      let beforeArrow = this.myLatex.substring(0, this.myLatex.indexOf('='));
+      this.MQ.MathField(this.mathField).keystroke('End');
+      for (let i = 0; i < 60; i++) {
+        this.MQ.MathField(this.mathField).keystroke('Backspace');
+      }
+      this.MQ.MathField(this.mathField).write(beforeArrow);
+    }
   }
 
   @HostListener('document:keyup', ['$event'])
   handleKeyupEvent(event: KeyboardEvent) {
-    /*     console.log('Keyup: ', event.key);
-    console.log('myLatex: ', this.myLatex); */
-
-    //----------------------------------------------------------------------------------
-    let currentElement: HTMLElement = document.getElementsByClassName(
-      'mq-cursor'
-    )[0] as HTMLElement;
-
-    //  document.getElementById("item1").nextSibling.innerHTML;
-
-    console.log(
-      'CurrentElement__previousSibling: ',
-      currentElement.previousSibling
-    );
-
-    console.log(
-      'CurrentElement__parrentElement: ',
-      currentElement.parentElement
-    );
-
-    // if (!this.deleteOnlySolution) {
-    if (currentElement.previousSibling) {
-      this.previousSibling = currentElement.previousSibling as Element;
-
-      console.log(
-        'XXX: ',
-        this.previousSibling.getAttribute('mathquill-command-id')
-      );
-    } else {
-      this.previousSibling = null;
-    }
-
-    if (currentElement.nextSibling) {
-      this.nextSibling = currentElement.nextSibling as Element;
-
-      console.log(
-        'YYY: ',
-        this.nextSibling.getAttribute('mathquill-command-id')
-      );
-    } else {
-      this.nextSibling = null;
-    }
-
-    if (currentElement.parentElement) {
-      this.parentElement = currentElement.parentElement as Element;
-
-      console.log(
-        'ZZZ: ',
-        this.parentElement.getAttribute('mathquill-block-id')
-      );
-    } else {
-      this.parentElement = null;
-    }
-    // }
-
-    console.log('CurrentElement__nextSibling: ', currentElement.nextSibling);
-
-    console.log('CurrentElement: ', currentElement);
-
     //-------------------------------------------------------------------------
 
     if (event.key == 'Control') {
@@ -700,12 +455,6 @@ export class AppComponent implements AfterViewInit, DoCheck {
         },
       }, */
     });
-
-    /*     setTimeout(() => {
-      console.log('GGG: ', this.mathFieldXXX.latex());
-
-      this.myLatex = this.mathFieldXXX.latex();
-    }, 5000); */
 
     this.MQ.MathField(this.mathField).focus();
 
